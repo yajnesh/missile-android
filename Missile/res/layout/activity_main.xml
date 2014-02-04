@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MissileActivity" >
+
+    <TextView
+        android:id="@+id/txtHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="#f2f2f2"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/new_missile"
+        android:textSize="22sp" />
+
+    <EditText
+        android:id="@+id/editTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtHeader"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/missile_title"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/editMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTitle"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/missile_content"
+        android:minHeight="100dp"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btnSend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editMessage"
+        android:layout_centerHorizontal="true"
+        android:text="@string/send_missile"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/btnGet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnSend"
+        android:layout_centerHorizontal="true"
+        android:onClick="getMissiles"
+        android:text="@string/get_missile"
+        android:textSize="18sp" />
+
+</RelativeLayout>
