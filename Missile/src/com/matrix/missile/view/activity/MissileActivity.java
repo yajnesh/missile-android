@@ -1,7 +1,10 @@
 package com.matrix.missile.view.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.matrix.missile.R;
@@ -9,24 +12,34 @@ import com.matrix.missile.controller.tag.TagController;
 import com.matrix.missile.model.Missile;
 import com.matrix.missile.view.customviews.component.LinkEnabledTextView;
 
-public class MissileActivity extends Activity {
+public class MissileActivity extends Fragment {
 	private TextView tvTitle;
 	private LinkEnabledTextView tvMessage;
 	private Missile missile;
+	private View rootView;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		rootView = inflater.inflate(R.layout.activity_missile_layout,
+				container, false);
+		return rootView;
+	}
+	
+	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_missile_layout);
-		missile = getIntent().getParcelableExtra("missile");
+		
+		missile = getArguments().getParcelable("missile");
 		initialize();
 		tvTitle.setText(missile.getTitle());
 		tvMessage.setText(missile.getMessage());
-		tvMessage.setOnTextLinkClickListener(new TagController(this));
+		
+		ViewMissilesActivity viewMissilesActivity = new ViewMissilesActivity();
+		tvMessage.setOnTextLinkClickListener(new TagController(getFragmentManager(),viewMissilesActivity,this));
 	}
 
 	private void initialize() {
-		tvTitle = (TextView) findViewById(R.id.tvTitle);
-		tvMessage = (LinkEnabledTextView) findViewById(R.id.tvMessage);
+		tvTitle = (TextView) rootView.findViewById(R.id.tvTitle);
+		tvMessage = (LinkEnabledTextView) rootView.findViewById(R.id.tvMessage);
 	}
 }

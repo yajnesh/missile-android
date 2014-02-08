@@ -16,7 +16,7 @@
             style="@style/subHeadingStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Wat&apos;s hot"
+            android:text="@string/what_s_hot"
             app:isItalic="true" />
 
         <TextSwitcher

@@ -8,12 +8,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -27,26 +28,33 @@ import com.matrix.missile.util.MissileRestClient;
 import com.matrix.missile.util.Util;
 import com.matrix.missile.util.db.MissileIdDataSource;
 
-public class SendMissileActivity extends Activity implements OnClickListener {
+public class SendMissileActivity extends Fragment implements OnClickListener {
 	private final static String Tag = "Missile";
 	private EditText editTitle;
 	private EditText editMessage;
 	private MissileIdDataSource datasource;
+	private View rootView;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		rootView = inflater.inflate(R.layout.activity_main,
+				container, false);
+		return rootView;
+	}
+	
+	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
 		initialize();
-		datasource = new MissileIdDataSource(this);
+		datasource = new MissileIdDataSource(getActivity());
 		datasource.open();
 	}
 
 	private void initialize() {
-		editTitle = (EditText) findViewById(R.id.editTitle);
-		editMessage = (EditText) findViewById(R.id.editMessage);
-		((Button) findViewById(R.id.btnSend)).setOnClickListener(this);
 
+		editTitle = (EditText) rootView.findViewById(R.id.editTitle);
+		editMessage = (EditText) rootView.findViewById(R.id.editMessage);
+		((Button) rootView.findViewById(R.id.btnSend)).setOnClickListener(this);
 	}
 
 	@Override
@@ -54,7 +62,7 @@ public class SendMissileActivity extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.btnSend:
 			if (editMessage.getText().toString().trim().equals("")) {
-				Util.showToast(SendMissileActivity.this, "Please enter message");
+				Util.showToast(getActivity(), "Please enter message");
 				editMessage.requestFocus();
 			} else {
 				createMissile();
@@ -78,7 +86,7 @@ public class SendMissileActivity extends Activity implements OnClickListener {
 			Log.e(Tag, e1.getMessage());
 			e1.printStackTrace();
 		}
-		MissileRestClient.post(SendMissileActivity.this, "missiles.json",
+		MissileRestClient.post(getActivity(), "missiles.json",
 				entity, jsonHttpPostResponseHandler);
 	}
 
@@ -92,7 +100,7 @@ public class SendMissileActivity extends Activity implements OnClickListener {
 
 				e.printStackTrace();
 			}
-			Util.showToast(SendMissileActivity.this,
+			Util.showToast(getActivity(),
 					"Missile launched successfully");
 		}
 
@@ -102,33 +110,23 @@ public class SendMissileActivity extends Activity implements OnClickListener {
 			if (errorResponse != null) {
 				Log.d(Tag, errorResponse.toString());
 			}
-			Util.showToast(SendMissileActivity.this,
+			Util.showToast(getActivity(),
 					"Error in Missile launch , status code:" + status);
 		}
 	};
 
-	public void getMissiles(View v) {
-		Intent intent = new Intent(this, ViewMissilesActivity.class);
-		intent.putExtra("url", "missiles.json");
-		startActivity(intent);
-	}
-
+	
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		datasource.open();
 		super.onResume();
 	}
 
 	@Override
-	protected void onPause() {
+	public void onPause() {
 		datasource.close();
 		super.onPause();
 	}
 
-	public void getMyMissiles(View view) {
-
-		startActivity(new Intent(SendMissileActivity.this,
-				MyMissilesActivity.class));
-	}
 
 }

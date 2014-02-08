@@ -4,11 +4,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -27,7 +30,7 @@ import com.matrix.missile.model.Missile;
 import com.matrix.missile.util.MissileRestClient;
 import com.matrix.missile.util.Pagination;
 
-public class ViewMissilesActivity extends Activity {
+public class ViewMissilesActivity extends Fragment {
 
 	protected static final String LOG_TAG = "ViewMissilesActivity";
 	private ViewMissileAdapter mViewMissileAdapter;
@@ -37,12 +40,23 @@ public class ViewMissilesActivity extends Activity {
 	private String mUrl;
 	private int mInterval = 10000; // 5 seconds by default, can be changed later
 	private Handler handler;
+	private View rootView;
+
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		rootView = inflater.inflate(R.layout.activity_missile,
+				container, false);
+		return rootView;
+	}
+
+	
+	
+	
+	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_missile);
-		mUrl = getIntent().getStringExtra("url");
+		mUrl=getArguments().getString("url");
 		initListView();
 		pagination.getMissileFromServer();
 		getHotMissileFromServer();
@@ -50,27 +64,27 @@ public class ViewMissilesActivity extends Activity {
 	}
 
 	private void initListView() {
-		listView = (ListView) findViewById(R.id.lv_missiles);
-		mViewMissileAdapter = new ViewMissileAdapter(ViewMissilesActivity.this);
+		listView = (ListView) rootView.findViewById(R.id.lv_missiles);
+		mViewMissileAdapter = new ViewMissileAdapter(getActivity());
 		listView.setAdapter(mViewMissileAdapter);
 		pagination = new Pagination(listView, mViewMissileAdapter, mUrl);
 		listView.setOnScrollListener(pagination);
 		listView.setOnItemClickListener(listener);
-		tvHotMissile = (TextSwitcher) findViewById(R.id.tvHotMissile);
+		tvHotMissile = (TextSwitcher) rootView.findViewById(R.id.tvHotMissile);
 		// Set the ViewFactory of the TextSwitcher that will create TextView
 		// object when asked
 		tvHotMissile.setFactory(new ViewFactory() {
 
 			public View makeView() {
-				TextView myText = (TextView) getLayoutInflater().inflate(
+				TextView myText = (TextView) getActivity().getLayoutInflater().inflate(
 						R.layout.custom_text_view, null);
 				return myText;
 			}
 		});
 		// Declare the in and out animations and initialize them
-		Animation in = AnimationUtils.loadAnimation(this,
+		Animation in = AnimationUtils.loadAnimation(getActivity(),
 				android.R.anim.slide_in_left);
-		Animation out = AnimationUtils.loadAnimation(this,
+		Animation out = AnimationUtils.loadAnimation(getActivity(),
 				android.R.anim.slide_out_right);
 
 		// set the animation type of textSwitcher
@@ -83,11 +97,30 @@ public class ViewMissilesActivity extends Activity {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
+			
+			
+			
+			FragmentManager fragmentManager2 = getFragmentManager();
+			FragmentTransaction fragmentTransaction2 = fragmentManager2.beginTransaction();
+			MissileActivity fragment2 = new MissileActivity();
+			
 			Missile missile = (Missile) listView.getItemAtPosition(position);
-			Intent intent = new Intent(ViewMissilesActivity.this,
-					MissileActivity.class);
-			intent.putExtra("missile", missile);
-			startActivity(intent);
+			Bundle bundle = new Bundle();
+			bundle.putParcelable("missile", missile);
+			fragment2.setArguments(bundle);
+
+			
+			fragmentTransaction2.addToBackStack(null);
+			fragmentTransaction2.hide(ViewMissilesActivity.this);
+			fragmentTransaction2.add(android.R.id.content, fragment2);
+			fragmentTransaction2.commit();
+			
+			
+//			Missile missile = (Missile) listView.getItemAtPosition(position);
+//			Intent intent = new Intent(ViewMissilesActivity.this,
+//					MissileActivity.class);
+//			intent.putExtra("missile", missile);
+//			startActivity(intent);
 		}
 	};
 
