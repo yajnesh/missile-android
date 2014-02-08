@@ -6,12 +6,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,24 +29,33 @@ import com.matrix.missile.model.Missile;
 import com.matrix.missile.util.MissileRestClient;
 import com.matrix.missile.util.db.MissileIdDataSource;
 
-public class MyMissilesActivity extends Activity {
+public class MyMissilesActivity extends Fragment {
 	private ViewMissileAdapter mViewMissileAdapter;
 	private ListView listView;
 	private MissileIdDataSource datasource;
+	private View rootView;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		rootView = inflater
+				.inflate(R.layout.activity_missile, container, false);
+		return rootView;
+	}
+
+	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_missile);
 		initListView();
-		datasource = new MissileIdDataSource(this);
+		datasource = new MissileIdDataSource(getActivity());
 		datasource.open();
 		getMyMissilesFromServer();
 	}
 
 	private void initListView() {
-		listView = (ListView) findViewById(R.id.lv_missiles);
-		mViewMissileAdapter = new ViewMissileAdapter(MyMissilesActivity.this);
+		((LinearLayout) rootView.findViewById(R.id.header))
+				.setVisibility(View.GONE);
+		listView = (ListView) rootView.findViewById(R.id.lv_missiles);
+		mViewMissileAdapter = new ViewMissileAdapter(getActivity());
 		listView.setAdapter(mViewMissileAdapter);
 		listView.setOnItemClickListener(listener);
 	}
@@ -50,11 +64,26 @@ public class MyMissilesActivity extends Activity {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
+
+			FragmentManager fragmentManager2 = getFragmentManager();
+			FragmentTransaction fragmentTransaction2 = fragmentManager2
+					.beginTransaction();
+			MissileActivity fragment2 = new MissileActivity();
+
 			Missile missile = (Missile) listView.getItemAtPosition(position);
-			Intent intent = new Intent(MyMissilesActivity.this,
-					MissileActivity.class);
-			intent.putExtra("missile", missile);
-			startActivity(intent);
+			Bundle bundle = new Bundle();
+			bundle.putParcelable("missile", missile);
+			fragment2.setArguments(bundle);
+
+			fragmentTransaction2.addToBackStack(null);
+			fragmentTransaction2.hide(MyMissilesActivity.this);
+			fragmentTransaction2.add(android.R.id.content, fragment2);
+			fragmentTransaction2.commit();
+
+			// Missile missile = (Missile) listView.getItemAtPosition(position);
+			// Intent intent = new Intent(getActivity(), MissileActivity.class);
+			// intent.putExtra("missile", missile);
+			// startActivity(intent);
 		}
 	};
 
@@ -83,19 +112,18 @@ public class MyMissilesActivity extends Activity {
 		}
 
 		public void onFailure(String responseBody, Throwable error) {
-			Toast.makeText(MyMissilesActivity.this, "Failure",
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(), "Failure", Toast.LENGTH_LONG).show();
 		};
 	};
 
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		datasource.open();
 		super.onResume();
 	}
 
 	@Override
-	protected void onPause() {
+	public void onPause() {
 		datasource.close();
 		super.onPause();
 	}

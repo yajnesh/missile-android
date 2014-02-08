@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.matrix.missile.R;
 import com.matrix.missile.controller.adapter.NavBarAdapter;
@@ -100,35 +101,36 @@ public class HomeScreenActivity extends FragmentActivity {
 
 			switch (position) {
 			case 0:
-				ViewMissilesActivity viewMissileFragment = new ViewMissilesActivity();
+				showMissileList();
 
-				Bundle bundle = new Bundle();
-
-				bundle.putString("url", "missiles.json");
-				viewMissileFragment.setArguments(bundle);
-
-				FragmentManager fragmentManager = getSupportFragmentManager();
-
-				fragmentManager.beginTransaction()
-						.replace(R.id.frame_container, viewMissileFragment)
-						.commit();
-				
 				break;
-				
-			case 3:
-				SendMissileActivity sendMissileActivity =new SendMissileActivity();
 
+			case 1:
+				MyMissilesActivity myMissilesActivity = new MyMissilesActivity();
+				FragmentManager fragmentManager3 = getSupportFragmentManager();
+				fragmentManager3.beginTransaction()
+						.replace(R.id.frame_container, myMissilesActivity)
+						.commit();
+
+				break;
+
+			case 2:
+
+				Toast.makeText(getApplicationContext(), "Not yet implemented",
+						Toast.LENGTH_LONG).show();
+
+			case 3:
+				SendMissileActivity sendMissileActivity = new SendMissileActivity();
 
 				FragmentManager fragmentManager2 = getSupportFragmentManager();
 
 				fragmentManager2.beginTransaction()
 						.replace(R.id.frame_container, sendMissileActivity)
 						.commit();
-				
-				break;
-				}
 
-			
+				break;
+			}
+
 		}
 
 		// Toast.makeText(HomeScreenActivity.this , position + " " + id,
@@ -184,7 +186,7 @@ public class HomeScreenActivity extends FragmentActivity {
 		generateStaticNavBarItems();
 		setNavigationBar();
 		setNavigationListAdapter();
-
+		showMissileList();
 	}
 
 	private void generateStaticNavBarItems() {
@@ -196,6 +198,20 @@ public class HomeScreenActivity extends FragmentActivity {
 
 	private void initialize() {
 		tags = new ArrayList<NavigationDrawerModel>();
+	}
+
+	private void showMissileList() {
+		ViewMissilesActivity viewMissileFragment = new ViewMissilesActivity();
+
+		Bundle bundle = new Bundle();
+
+		bundle.putString("url", "missiles.json");
+		viewMissileFragment.setArguments(bundle);
+
+		FragmentManager fragmentManager = getSupportFragmentManager();
+
+		fragmentManager.beginTransaction()
+				.replace(R.id.frame_container, viewMissileFragment).commit();
 	}
 
 }

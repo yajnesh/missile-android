@@ -25,17 +25,18 @@ public class MissileActivity extends Fragment {
 				container, false);
 		return rootView;
 	}
-	
+
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		missile = getArguments().getParcelable("missile");
 		initialize();
 		tvTitle.setText(missile.getTitle());
 		tvMessage.setText(missile.getMessage());
-		
+
 		ViewMissilesActivity viewMissilesActivity = new ViewMissilesActivity();
-		tvMessage.setOnTextLinkClickListener(new TagController(getFragmentManager(),viewMissilesActivity,this));
+		tvMessage.setOnTextLinkClickListener(new TagController(
+				getFragmentManager(), viewMissilesActivity, this));
 	}
 
 	private void initialize() {
