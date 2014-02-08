@@ -37,6 +37,8 @@ public class MissileFragment extends Fragment {
 		ViewMissilesFragment viewMissilesActivity = new ViewMissilesFragment();
 		tvMessage.setOnTextLinkClickListener(new TagController(
 				getFragmentManager(), viewMissilesActivity, this));
+		
+		getActivity().getActionBar().setHomeButtonEnabled(true);
 	}
 
 	private void initialize() {

@@ -2,17 +2,25 @@ package com.matrix.missile.view.activity;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MenuItem.OnActionExpandListener;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Toast;
 
 import com.matrix.missile.R;
@@ -33,6 +41,8 @@ public class HomeScreenActivity extends FragmentActivity implements
 	private CharSequence mAppTitle;
 	private ListView mDrawerList;
 	private boolean isDrawerOpen = false;
+	private MenuItem searchItem;
+	private Handler delaySearchHandler;
 
 	private NavigationDrawerModel getNavigationDrawerModel(String title) {
 		NavigationDrawerModel navModel = new NavigationDrawerModel();
@@ -41,6 +51,7 @@ public class HomeScreenActivity extends FragmentActivity implements
 	}
 
 	private void setNavigationBar() {
+
 		mAppTitle = mDrawerTitle = getTitle();
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
@@ -143,6 +154,16 @@ public class HomeScreenActivity extends FragmentActivity implements
 
 	private void initialize() {
 		tags = new ArrayList<NavigationDrawerModel>();
+
+		delaySearchHandler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				if (msg.what == 5) {
+					search((String) msg.obj);
+
+				}
+			}
+		};
 	}
 
 	private void showMissileList() {
@@ -192,4 +213,95 @@ public class HomeScreenActivity extends FragmentActivity implements
 
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.home_screen_activity, menu);
+
+		setSearchBar(menu);
+		// setSortSpinner(menu);
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	protected boolean isSearchBarExpanded = false;
+
+	private void setSearchBar(Menu menu) {
+
+		// menu.findItem(R.id.action_bar);
+
+		searchItem = menu.findItem(R.id.action_search);
+		SearchView searchView = (SearchView) searchItem.getActionView();
+
+		searchItem.setOnActionExpandListener(new OnActionExpandListener() {
+
+			@Override
+			public boolean onMenuItemActionExpand(MenuItem item) {
+				isSearchBarExpanded = true;
+				mDrawerLayout
+						.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+				return true;
+			}
+
+			@Override
+			public boolean onMenuItemActionCollapse(MenuItem item) {
+				isSearchBarExpanded = false;
+				// Enable drawer opening by left-to-right swipe while
+				// search bar is collapsed
+				mDrawerLayout
+						.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+				return true;
+
+			}
+		});
+
+		searchView.setOnQueryTextListener(new OnQueryTextListener() {
+
+			@Override
+			public boolean onQueryTextSubmit(String key) {
+
+				if (key != null && key.length() > 0) {
+					search(key);
+					hideVirtualKeyBoard();
+				}
+				return true;
+			}
+
+			
+
+			@Override
+			public boolean onQueryTextChange(String key) {
+
+				if (key == null || key.length() == 0) {
+					if (!isDrawerOpen && isSearchBarExpanded) {
+						// selectItem(lastSelectedItemPosition);
+					}
+				} else {
+
+					delaySearchHandler.removeMessages(5);
+					final Message msg = Message.obtain(delaySearchHandler, 5,
+							key);
+					delaySearchHandler.sendMessageDelayed(msg, 750);
+
+				}
+
+				return true;
+			}
+		});
+
+	}
+
+	/**
+	 * hides the soft keyboard
+	 */
+	private void hideVirtualKeyBoard() {
+		InputMethodManager inputManager = (InputMethodManager) this
+				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputManager.hideSoftInputFromWindow(this.getCurrentFocus()
+				.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+	}
+	
+	private void search(String key) {
+
+		Toast.makeText(this, key, Toast.LENGTH_SHORT).show();
+	}
 }

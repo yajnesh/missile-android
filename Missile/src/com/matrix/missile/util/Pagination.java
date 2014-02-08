@@ -2,9 +2,6 @@ package com.matrix.missile.util;
 
 import org.json.JSONArray;
 
-import android.app.Activity;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
