@@ -1,4 +1,4 @@
-package com.matrix.missile;
+package com.matrix.missile.util;
 
 import org.apache.http.entity.StringEntity;
 

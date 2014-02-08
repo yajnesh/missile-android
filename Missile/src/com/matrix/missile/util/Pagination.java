@@ -1,4 +1,4 @@
-package com.matrix.missile;
+package com.matrix.missile.util;
 
 import org.json.JSONArray;
 
@@ -9,7 +9,7 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.matrix.missile.adapter.ViewMissileAdapter;
+import com.matrix.missile.controller.adapter.ViewMissileAdapter;
 import com.matrix.missile.model.Missile;
 
 public class Pagination  extends JsonHttpResponseHandler implements OnScrollListener{

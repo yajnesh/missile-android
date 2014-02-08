@@ -1,4 +1,4 @@
-package com.matrix.missile.activity;
+package com.matrix.missile.view.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,10 +8,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.matrix.missile.Pagination;
 import com.matrix.missile.R;
-import com.matrix.missile.adapter.ViewMissileAdapter;
+import com.matrix.missile.controller.adapter.ViewMissileAdapter;
 import com.matrix.missile.model.Missile;
+import com.matrix.missile.util.Pagination;
 
 public class ViewMissilesActivity extends Activity {
 

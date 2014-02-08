@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/missile_lis"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical" >
 
-    <TextView
+    <com.matrix.missile.view.customviews.CustomeTextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <TextView
+    <com.matrix.missile.view.customviews.component.LinkEnabledTextView
         android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvTitle"
+        android:maxLines="3"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-</LinearLayout>
+</RelativeLayout>

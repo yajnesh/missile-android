@@ -1,17 +1,15 @@
-package com.matrix.missile.activity;
+package com.matrix.missile.view.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 import com.matrix.missile.R;
-import com.matrix.missile.component.LinkEnabledTextView;
-import com.matrix.missile.component.TextLinkClickListener;
+import com.matrix.missile.controller.tag.TagController;
 import com.matrix.missile.model.Missile;
+import com.matrix.missile.view.customviews.component.LinkEnabledTextView;
 
-public class MissileActivity extends Activity implements TextLinkClickListener {
+public class MissileActivity extends Activity {
 	private TextView tvTitle;
 	private LinkEnabledTextView tvMessage;
 	private Missile missile;
@@ -23,20 +21,12 @@ public class MissileActivity extends Activity implements TextLinkClickListener {
 		missile = getIntent().getParcelableExtra("missile");
 		initialize();
 		tvTitle.setText(missile.getTitle());
-		tvMessage.setLinkEnabledText(missile.getMessage());
-		tvMessage.setOnTextLinkClickListener(this);
-
+		tvMessage.setText(missile.getMessage());
+		tvMessage.setOnTextLinkClickListener(new TagController(this));
 	}
 
 	private void initialize() {
 		tvTitle = (TextView) findViewById(R.id.tvTitle);
 		tvMessage = (LinkEnabledTextView) findViewById(R.id.tvMessage);
-
-	}
-
-	public void onTextLinkClick(View textView, String clickedString) {
-		Intent intent = new Intent(this, ViewMissilesActivity.class);
-		intent.putExtra("url", "tags/"+clickedString.replace("#", "")+".json");
-		startActivity(intent);
 	}
 }

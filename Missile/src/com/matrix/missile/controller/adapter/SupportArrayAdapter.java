@@ -1,4 +1,4 @@
-package com.matrix.missile.adapter;
+package com.matrix.missile.controller.adapter;
 
 import java.util.ArrayList;
 
