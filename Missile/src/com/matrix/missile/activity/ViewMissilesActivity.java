@@ -8,7 +8,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import com.matrix.missile.MissileActivity;
 import com.matrix.missile.Pagination;
 import com.matrix.missile.R;
 import com.matrix.missile.adapter.ViewMissileAdapter;
@@ -20,12 +19,13 @@ public class ViewMissilesActivity extends Activity {
 	private ViewMissileAdapter mViewMissileAdapter;
 	private ListView listView;
 	private Pagination pagination;
-	private String mUrl = "missiles.json";
+	private String mUrl;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_missile);
+		mUrl=getIntent().getStringExtra("url");
 		initListView();
 		pagination.getMissileFromServer();
 	}

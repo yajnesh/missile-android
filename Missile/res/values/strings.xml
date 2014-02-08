@@ -10,5 +10,6 @@
     <string name="send_missile">Send Missile</string>
     <string name="get_missile">Get missile</string>
     <string name="title_activity_missile">Missile</string>
+    <string name="title_activity_tags">TagsActivity</string>
 
 </resources>

@@ -1,9 +1,12 @@
-package com.matrix.missile;
+package com.matrix.missile.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.matrix.missile.R;
+import com.matrix.missile.R.id;
+import com.matrix.missile.R.layout;
 import com.matrix.missile.model.Missile;
 
 public class MissileActivity extends Activity {

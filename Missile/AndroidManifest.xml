@@ -30,8 +30,12 @@
             android:label="@string/title_activity_missile" >
         </activity>
         <activity
-            android:name="com.matrix.missile.MissileActivity"
+            android:name="com.matrix.missile.activity.MissileActivity"
             android:label="@string/title_activity_missile" >
+        </activity>
+        <activity
+            android:name="com.matrix.missile.TagsActivity"
+            android:label="@string/title_activity_tags" >
         </activity>
     </application>
 

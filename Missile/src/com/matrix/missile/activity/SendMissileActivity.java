@@ -43,7 +43,7 @@ public class SendMissileActivity extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.btnSend:
 			if (editMessage.getText().toString().trim().equals("")) {
-				Util.showToast(SendMissileActivity.this,"Please enter message");
+				Util.showToast(SendMissileActivity.this, "Please enter message");
 				editMessage.requestFocus();
 			} else {
 				createMissile();
@@ -67,15 +67,16 @@ public class SendMissileActivity extends Activity implements OnClickListener {
 			Log.e(Tag, e1.getMessage());
 			e1.printStackTrace();
 		}
-		MissileRestClient.post(SendMissileActivity.this, "missiles.json", entity,
-				jsonHttpPostResponseHandler);
+		MissileRestClient.post(SendMissileActivity.this, "missiles.json",
+				entity, jsonHttpPostResponseHandler);
 	}
 
 	private JsonHttpResponseHandler jsonHttpPostResponseHandler = new JsonHttpResponseHandler() {
 		@Override
 		public void onSuccess(int status, JSONObject response) {
 			super.onSuccess(response);
-			Util.showToast(SendMissileActivity.this,"Missile launched successfully");
+			Util.showToast(SendMissileActivity.this,
+					"Missile launched successfully");
 		}
 
 		@Override
@@ -90,8 +91,10 @@ public class SendMissileActivity extends Activity implements OnClickListener {
 	};
 
 	public void getMissiles(View v) {
-
-		startActivity(new Intent(this, ViewMissilesActivity.class));
+		Intent intent = new Intent(this, ViewMissilesActivity.class);
+		//intent.putExtra("url", "missiles.json");
+		intent.putExtra("url", "tags/yajnesh.json");
+		startActivity(intent);
 
 	}
 
