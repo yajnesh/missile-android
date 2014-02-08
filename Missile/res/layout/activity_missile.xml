@@ -1,18 +1,41 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_background"
+    android:orientation="vertical"
     tools:context=".ViewMissilesActivity" >
+
+    <LinearLayout
+        style="@style/headerStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <com.matrix.missile.view.customviews.CustomeTextView
+            style="@style/subHeadingStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wat&apos;s hot"
+            app:isItalic="true" />
+
+        <com.matrix.missile.view.customviews.CustomeTextView
+            style="@style/headerMessageStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jan 21, 2012 - setAdapter(adap); } // EfficientAdapter : to make a customized list view item public class EfficientAdapter extends BaseAdapter implements ..." />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/lv_missiles"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/main_background"
         android:divider="@android:color/transparent"
         android:dividerHeight="@dimen/normal_padding"
         android:drawSelectorOnTop="true"
         android:listSelector="@drawable/selectable_background_missile" >
     </ListView>
 
-</RelativeLayout>
+</LinearLayout>

@@ -5,8 +5,7 @@
             <padding
                 android:bottom="@dimen/activity_vertical_margin"
                 android:left="@dimen/activity_horizontal_margin"
-                android:right="@dimen/activity_horizontal_margin"
-                android:top="@dimen/activity_vertical_margin" />
+                android:right="@dimen/activity_horizontal_margin" />
 
             <solid android:color="@color/solid_white" />
         </shape>
