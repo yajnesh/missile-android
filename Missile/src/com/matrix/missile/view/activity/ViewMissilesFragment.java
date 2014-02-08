@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
@@ -40,22 +42,31 @@ public class ViewMissilesFragment extends Fragment {
 	private int mInterval = 10000; // 5 seconds by default, can be changed later
 	private Handler handler;
 	private View rootView;
+	private HomeScreenActivity activity;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		if (rootView != null && rootView.getParent() != null) {
+			FrameLayout vv = (FrameLayout) rootView.getParent();
+			vv.removeView(rootView);
+
+			return rootView;
+		}
 		rootView = inflater
 				.inflate(R.layout.activity_missile, container, false);
-		return rootView;
-	}
-
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		mUrl = getArguments().getString("url");
 		initListView();
 		pagination.getMissileFromServer();
 		getHotMissileFromServer();
 		startRepeatingTask();
+		return rootView;
+	}
+
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
 	}
 
 	private void initListView() {
@@ -113,7 +124,7 @@ public class ViewMissilesFragment extends Fragment {
 	};
 
 	private void updateMissileList() {
-		getLatestMissileFromServer();
+		// getLatestMissileFromServer();
 		getHotMissileFromServer();
 	}
 

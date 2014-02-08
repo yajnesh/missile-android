@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -38,17 +39,24 @@ public class MyMissilesFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		if (rootView != null && rootView.getParent() != null) {
+			FrameLayout vv = (FrameLayout) rootView.getParent();
+			vv.removeView(rootView);
+			return rootView;
+		}
 		rootView = inflater
 				.inflate(R.layout.activity_missile, container, false);
+		initListView();
+		datasource = new MissileIdDataSource(getActivity());
+		datasource.open();
+		getMyMissilesFromServer();
 		return rootView;
 	}
 
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		initListView();
-		datasource = new MissileIdDataSource(getActivity());
-		datasource.open();
-		getMyMissilesFromServer();
+
 	}
 
 	private void initListView() {

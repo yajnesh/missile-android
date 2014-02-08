@@ -11,7 +11,7 @@ public class StartModule {
 
 	public static void addFragmentForModule(FragmentManager ftt,
 			final Fragment fragment) {
-		//ftt.executePendingTransactions();
+		ftt.executePendingTransactions();
 		FragmentTransaction ft = ftt.beginTransaction();
 		ft.replace(R.id.frame_container, fragment, fragment.getClass()
 				.getSimpleName());

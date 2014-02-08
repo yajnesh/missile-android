@@ -11,8 +11,8 @@ import com.loopj.android.http.RequestParams;
 public class MissileRestClient {
 	// public static final String BASE_URL =
 	// "http://missile.herokuapp.com/missiles/";
-	//public static final String BASE_URL = "http://192.168.0.106:3000/missiles";
-	public static final String BASE_URL = "http://missile.herokuapp.com/";
+	public static final String BASE_URL = "http://192.168.102.177:3000/";
+	// public static final String BASE_URL = "http://missile.herokuapp.com/";
 	private static AsyncHttpClient client = new AsyncHttpClient();
 
 	public static void get(String url, RequestParams params,
