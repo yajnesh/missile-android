@@ -1,12 +1,26 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".ViewMissilesFragment" >
 
+    <ListView
+        android:layout_below="@+id/header"
+        android:id="@+id/lv_missiles"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/main_background"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="@dimen/normal_padding"
+        android:drawSelectorOnTop="true"
+        android:listSelector="@drawable/selectable_background_missile" >
+    </ListView>
+
     <LinearLayout
+       
+        android:layout_alignParentTop="true"
         android:id="@+id/header"
         style="@style/headerStyle"
         android:layout_width="match_parent"
@@ -26,16 +40,4 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/lv_missiles"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        android:background="@drawable/main_background"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="@dimen/normal_padding"
-        android:drawSelectorOnTop="true"
-        android:listSelector="@drawable/selectable_background_missile" >
-    </ListView>
-
-</LinearLayout>
+</RelativeLayout>

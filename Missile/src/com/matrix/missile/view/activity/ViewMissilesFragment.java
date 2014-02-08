@@ -11,11 +11,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
@@ -30,7 +32,7 @@ import com.matrix.missile.model.Missile;
 import com.matrix.missile.util.MissileRestClient;
 import com.matrix.missile.util.Pagination;
 
-public class ViewMissilesFragment extends Fragment {
+public class ViewMissilesFragment extends Fragment  {
 
 	protected static final String LOG_TAG = "ViewMissilesActivity";
 	private ViewMissileAdapter mViewMissileAdapter;
@@ -42,6 +44,7 @@ public class ViewMissilesFragment extends Fragment {
 	private Handler handler;
 	private View rootView;
 
+	private LinearLayout mHeaderView;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -67,6 +70,8 @@ public class ViewMissilesFragment extends Fragment {
 		listView.setOnScrollListener(pagination);
 		listView.setOnItemClickListener(listener);
 		tvHotMissile = (TextSwitcher) rootView.findViewById(R.id.tvHotMissile);
+		
+		mHeaderView = (LinearLayout) rootView.findViewById(R.id.header);
 		// Set the ViewFactory of the TextSwitcher that will create TextView
 		// object when asked
 		tvHotMissile.setFactory(new ViewFactory() {
@@ -86,6 +91,21 @@ public class ViewMissilesFragment extends Fragment {
 		// set the animation type of textSwitcher
 		tvHotMissile.setInAnimation(in);
 		tvHotMissile.setOutAnimation(out);
+		
+		mHeaderView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+
+				//Toast.makeText(getActivity(), "aa",	Toast.LENGTH_LONG).show();
+				MissileFragment missileFragment = new MissileFragment();
+				Bundle bundle = new Bundle();
+				bundle.putParcelable("missile", (Missile)tvHotMissile.getTag());
+				missileFragment.setArguments(bundle);
+				StartModule.addFragmentForModule(getFragmentManager(),
+				missileFragment);
+			}
+		});
 		handler = new Handler();
 	}
 
@@ -142,6 +162,7 @@ public class ViewMissilesFragment extends Fragment {
 		@Override
 		public void onSuccess(JSONObject missilesJsonObject) {
 			try {
+				tvHotMissile.setTag(missilesJsonObject);
 				String message = missilesJsonObject.getString("message");
 				tvHotMissile.setText(message);
 			} catch (JSONException e) {
@@ -164,6 +185,7 @@ public class ViewMissilesFragment extends Fragment {
 			mViewMissileAdapter.notifyDataSetChanged();
 		}
 	};
+	private boolean isUp=false;
 
 	private void getLatestMissileFromServer() {
 		// http://localhost:3000/missiles/new_missiles.json?id=12&page=2
