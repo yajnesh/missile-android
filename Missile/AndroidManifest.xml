@@ -19,11 +19,6 @@
         <activity
             android:name="com.matrix.missile.view.activity.SendMissileActivity"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.matrix.missile.view.activity.ViewMissilesActivity"
@@ -32,6 +27,15 @@
         <activity
             android:name="com.matrix.missile.view.activity.MissileActivity"
             android:label="@string/title_activity_missile" >
+        </activity>
+        <activity
+            android:name="com.matrix.missile.view.activity.HomeScreenActivity"
+            android:label="@string/title_activity_home_screen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

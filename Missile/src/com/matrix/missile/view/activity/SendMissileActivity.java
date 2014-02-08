@@ -102,10 +102,8 @@ public class SendMissileActivity extends Activity implements OnClickListener {
 
 	public void getMissiles(View v) {
 		Intent intent = new Intent(this, ViewMissilesActivity.class);
-		// intent.putExtra("url", "missiles.json");
-		intent.putExtra("url", "tags/yajnesh.json");
+		intent.putExtra("url", "missiles.json");
 		startActivity(intent);
-
 	}
 
 	@Override
