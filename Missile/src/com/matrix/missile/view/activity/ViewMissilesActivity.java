@@ -1,15 +1,22 @@
 package com.matrix.missile.view.activity;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.TextSwitcher;
+import android.widget.TextView;
+import android.widget.ViewSwitcher.ViewFactory;
 
 import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -25,6 +32,7 @@ public class ViewMissilesActivity extends Activity {
 	protected static final String LOG_TAG = "ViewMissilesActivity";
 	private ViewMissileAdapter mViewMissileAdapter;
 	private ListView listView;
+	private TextSwitcher tvHotMissile;
 	private Pagination pagination;
 	private String mUrl;
 	private int mInterval = 10000; // 5 seconds by default, can be changed later
@@ -37,6 +45,7 @@ public class ViewMissilesActivity extends Activity {
 		mUrl = getIntent().getStringExtra("url");
 		initListView();
 		pagination.getMissileFromServer();
+		getHotMissileFromServer();
 		startRepeatingTask();
 	}
 
@@ -47,6 +56,26 @@ public class ViewMissilesActivity extends Activity {
 		pagination = new Pagination(listView, mViewMissileAdapter, mUrl);
 		listView.setOnScrollListener(pagination);
 		listView.setOnItemClickListener(listener);
+		tvHotMissile = (TextSwitcher) findViewById(R.id.tvHotMissile);
+		// Set the ViewFactory of the TextSwitcher that will create TextView
+		// object when asked
+		tvHotMissile.setFactory(new ViewFactory() {
+
+			public View makeView() {
+				TextView myText = (TextView) getLayoutInflater().inflate(
+						R.layout.custom_text_view, null);
+				return myText;
+			}
+		});
+		// Declare the in and out animations and initialize them
+		Animation in = AnimationUtils.loadAnimation(this,
+				android.R.anim.slide_in_left);
+		Animation out = AnimationUtils.loadAnimation(this,
+				android.R.anim.slide_out_right);
+
+		// set the animation type of textSwitcher
+		tvHotMissile.setInAnimation(in);
+		tvHotMissile.setOutAnimation(out);
 		handler = new Handler();
 	}
 
@@ -74,9 +103,29 @@ public class ViewMissilesActivity extends Activity {
 
 	private void updateMissileList() {
 		getLatestMissileFromServer();
+		getHotMissileFromServer();
 	}
 
-	JsonHttpResponseHandler jsonResponseHandler = new JsonHttpResponseHandler() {
+	private void getHotMissileFromServer() {
+		// http://localhost:3000/missiles/hot_missile.json
+		MissileRestClient.get("missiles/hot_missile.json", null,
+				jsonHotMissileResponseHandler);
+	}
+
+	private JsonHttpResponseHandler jsonHotMissileResponseHandler = new JsonHttpResponseHandler() {
+		@Override
+		public void onSuccess(JSONObject missilesJsonObject) {
+			try {
+				String message = missilesJsonObject.getString("message");
+				tvHotMissile.setText(message);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	};
+
+	private JsonHttpResponseHandler jsonLatestMissileResponseHandler = new JsonHttpResponseHandler() {
 		@Override
 		public void onSuccess(JSONArray missilesJsonArray) {
 			Gson gson = new Gson();
@@ -96,7 +145,7 @@ public class ViewMissilesActivity extends Activity {
 		RequestParams requestParams = new RequestParams("id",
 				mViewMissileAdapter.getItem(0).getId());
 		MissileRestClient.get("missiles/new_missiles.json", requestParams,
-				jsonResponseHandler);
+				jsonLatestMissileResponseHandler);
 	}
 
 	private void startRepeatingTask() {
