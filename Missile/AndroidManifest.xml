@@ -17,15 +17,15 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.Missile" >
         <activity
-            android:name="com.matrix.missile.view.activity.SendMissileActivity"
+            android:name="com.matrix.missile.view.activity.SendMissileFragment"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.matrix.missile.view.activity.ViewMissilesActivity"
+            android:name="com.matrix.missile.view.activity.ViewMissilesFragment"
             android:label="@string/title_activity_missile" >
         </activity>
         <activity
-            android:name="com.matrix.missile.view.activity.MissileActivity"
+            android:name="com.matrix.missile.view.activity.MissileFragment"
             android:label="@string/title_activity_missile" >
         </activity>
         <activity
@@ -37,7 +37,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.matrix.missile.view.activity.MyMissilesActivity" >
+        <activity android:name="com.matrix.missile.view.activity.MyMissilesFragment" >
         </activity>
     </application>
 

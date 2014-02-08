@@ -3,14 +3,11 @@
 
     <string name="app_name">Missile</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
     <string name="new_missile">New Missile</string>
     <string name="missile_title">Missile Title</string>
     <string name="missile_content">Missile Content</string>
     <string name="send_missile">Send Missile</string>
-    <string name="get_missile">Get missile</string>
     <string name="title_activity_missile">Missile</string>
-    <string name="title_activity_tags">TagsActivity</string>
     <string name="title_activity_home_screen">Missile</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>

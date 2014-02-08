@@ -6,7 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,7 +28,7 @@ import com.matrix.missile.model.Missile;
 import com.matrix.missile.util.MissileRestClient;
 import com.matrix.missile.util.db.MissileIdDataSource;
 
-public class MyMissilesActivity extends Fragment {
+public class MyMissilesFragment extends Fragment {
 	private ViewMissileAdapter mViewMissileAdapter;
 	private ListView listView;
 	private MissileIdDataSource datasource;
@@ -68,7 +67,7 @@ public class MyMissilesActivity extends Fragment {
 			FragmentManager fragmentManager2 = getFragmentManager();
 			FragmentTransaction fragmentTransaction2 = fragmentManager2
 					.beginTransaction();
-			MissileActivity fragment2 = new MissileActivity();
+			MissileFragment fragment2 = new MissileFragment();
 
 			Missile missile = (Missile) listView.getItemAtPosition(position);
 			Bundle bundle = new Bundle();
@@ -76,7 +75,7 @@ public class MyMissilesActivity extends Fragment {
 			fragment2.setArguments(bundle);
 
 			fragmentTransaction2.addToBackStack(null);
-			fragmentTransaction2.hide(MyMissilesActivity.this);
+			fragmentTransaction2.hide(MyMissilesFragment.this);
 			fragmentTransaction2.add(android.R.id.content, fragment2);
 			fragmentTransaction2.commit();
 

@@ -1,10 +1,8 @@
 package com.matrix.missile.view.activity;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 import org.apache.http.entity.StringEntity;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,18 +15,14 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.matrix.missile.R;
-import com.matrix.missile.model.Missile;
 import com.matrix.missile.util.MissileRestClient;
 import com.matrix.missile.util.Util;
 import com.matrix.missile.util.db.MissileIdDataSource;
 
-public class SendMissileActivity extends Fragment implements OnClickListener {
+public class SendMissileFragment extends Fragment implements OnClickListener {
 	private final static String Tag = "Missile";
 	private EditText editTitle;
 	private EditText editMessage;
@@ -38,11 +32,10 @@ public class SendMissileActivity extends Fragment implements OnClickListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.activity_main,
-				container, false);
+		rootView = inflater.inflate(R.layout.activity_main, container, false);
 		return rootView;
 	}
-	
+
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		initialize();
@@ -86,8 +79,8 @@ public class SendMissileActivity extends Fragment implements OnClickListener {
 			Log.e(Tag, e1.getMessage());
 			e1.printStackTrace();
 		}
-		MissileRestClient.post(getActivity(), "missiles.json",
-				entity, jsonHttpPostResponseHandler);
+		MissileRestClient.post(getActivity(), "missiles.json", entity,
+				jsonHttpPostResponseHandler);
 	}
 
 	private JsonHttpResponseHandler jsonHttpPostResponseHandler = new JsonHttpResponseHandler() {
@@ -100,8 +93,7 @@ public class SendMissileActivity extends Fragment implements OnClickListener {
 
 				e.printStackTrace();
 			}
-			Util.showToast(getActivity(),
-					"Missile launched successfully");
+			Util.showToast(getActivity(), "Missile launched successfully");
 		}
 
 		@Override
@@ -115,7 +107,6 @@ public class SendMissileActivity extends Fragment implements OnClickListener {
 		}
 	};
 
-	
 	@Override
 	public void onResume() {
 		datasource.open();
@@ -127,6 +118,5 @@ public class SendMissileActivity extends Fragment implements OnClickListener {
 		datasource.close();
 		super.onPause();
 	}
-
 
 }

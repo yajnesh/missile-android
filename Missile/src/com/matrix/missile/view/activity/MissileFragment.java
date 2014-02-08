@@ -12,7 +12,7 @@ import com.matrix.missile.controller.tag.TagController;
 import com.matrix.missile.model.Missile;
 import com.matrix.missile.view.customviews.component.LinkEnabledTextView;
 
-public class MissileActivity extends Fragment {
+public class MissileFragment extends Fragment {
 	private TextView tvTitle;
 	private LinkEnabledTextView tvMessage;
 	private Missile missile;
@@ -34,7 +34,7 @@ public class MissileActivity extends Fragment {
 		tvTitle.setText(missile.getTitle());
 		tvMessage.setText(missile.getMessage());
 
-		ViewMissilesActivity viewMissilesActivity = new ViewMissilesActivity();
+		ViewMissilesFragment viewMissilesActivity = new ViewMissilesFragment();
 		tvMessage.setOnTextLinkClickListener(new TagController(
 				getFragmentManager(), viewMissilesActivity, this));
 	}

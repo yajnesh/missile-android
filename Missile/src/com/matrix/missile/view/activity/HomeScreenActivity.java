@@ -106,7 +106,7 @@ public class HomeScreenActivity extends FragmentActivity {
 				break;
 
 			case 1:
-				MyMissilesActivity myMissilesActivity = new MyMissilesActivity();
+				MyMissilesFragment myMissilesActivity = new MyMissilesFragment();
 				FragmentManager fragmentManager3 = getSupportFragmentManager();
 				fragmentManager3.beginTransaction()
 						.replace(R.id.frame_container, myMissilesActivity)
@@ -120,7 +120,7 @@ public class HomeScreenActivity extends FragmentActivity {
 						Toast.LENGTH_LONG).show();
 
 			case 3:
-				SendMissileActivity sendMissileActivity = new SendMissileActivity();
+				SendMissileFragment sendMissileActivity = new SendMissileFragment();
 
 				FragmentManager fragmentManager2 = getSupportFragmentManager();
 
@@ -201,7 +201,7 @@ public class HomeScreenActivity extends FragmentActivity {
 	}
 
 	private void showMissileList() {
-		ViewMissilesActivity viewMissileFragment = new ViewMissilesActivity();
+		ViewMissilesFragment viewMissileFragment = new ViewMissilesFragment();
 
 		Bundle bundle = new Bundle();
 
