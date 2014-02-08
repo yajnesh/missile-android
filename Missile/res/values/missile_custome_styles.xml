@@ -32,4 +32,10 @@
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>
 
+    <style name="lowPriorityStyle">
+        <item name="android:padding">@dimen/view_gap</item>
+        <item name="android:textColor">@color/text_muted</item>
+        <item name="isItalic">true</item>
+    </style>
+
 </resources>

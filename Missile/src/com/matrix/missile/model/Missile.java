@@ -1,5 +1,7 @@
 package com.matrix.missile.model;
 
+import com.matrix.missile.util.Util;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -7,7 +9,7 @@ public class Missile implements Parcelable {
 	private int id;
 	private String title;
 	private String message;
-	private String time;
+	private String created_at;
 
 	public Missile() {
 
@@ -21,7 +23,7 @@ public class Missile implements Parcelable {
 		id = in.readInt();
 		title = in.readString();
 		message = in.readString();
-		time = in.readString();
+		created_at = in.readString();
 	}
 
 	@Override
@@ -34,7 +36,7 @@ public class Missile implements Parcelable {
 		dest.writeInt(id);
 		dest.writeString(title);
 		dest.writeString(message);
-		dest.writeString(time);
+		dest.writeString(created_at);
 	}
 
 	public static final Parcelable.Creator<Missile> CREATOR = new Parcelable.Creator<Missile>() {
@@ -74,11 +76,11 @@ public class Missile implements Parcelable {
 	}
 
 	public String getTime() {
-		return time;
+		return Util.getHumanReadableUpdateAt(created_at);
 	}
 
 	public void setTime(String time) {
-		this.time = time;
+		this.created_at = time;
 	}
 
 	@Override

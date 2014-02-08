@@ -8,5 +8,6 @@
     <color name="white">#ffffff</color>
     <color name="theme_color_sub">#0f7d3e</color>
     <color name="indicator">#72e2a1</color>
+    <color name="text_muted">#54595c</color>
 
 </resources>
