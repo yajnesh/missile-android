@@ -190,6 +190,8 @@ public class HomeScreenActivity extends FragmentActivity implements
 		mDrawerList.setItemChecked(position, true);
 		mDrawerLayout.closeDrawer(mDrawerList);
 		navigationListAdapter.changeSelected(position);
+		
+		setTitle(tags.get(position).getNavItem());
 		switch (position) {
 		case 0:
 			showMissileList();
