@@ -13,7 +13,7 @@
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <com.matrix.missile.view.customviews.component.LinkEnabledTextView
+    <com.matrix.missile.view.customviews.CustomeTextView
         android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
