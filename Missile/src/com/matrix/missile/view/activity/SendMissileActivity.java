@@ -1,8 +1,10 @@
 package com.matrix.missile.view.activity;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import org.apache.http.entity.StringEntity;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,9 +16,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.matrix.missile.R;
+import com.matrix.missile.model.Missile;
 import com.matrix.missile.util.MissileRestClient;
 import com.matrix.missile.util.Util;
 import com.matrix.missile.util.db.MissileIdDataSource;
@@ -40,6 +46,7 @@ public class SendMissileActivity extends Activity implements OnClickListener {
 		editTitle = (EditText) findViewById(R.id.editTitle);
 		editMessage = (EditText) findViewById(R.id.editMessage);
 		((Button) findViewById(R.id.btnSend)).setOnClickListener(this);
+
 	}
 
 	@Override
@@ -117,4 +124,11 @@ public class SendMissileActivity extends Activity implements OnClickListener {
 		datasource.close();
 		super.onPause();
 	}
+
+	public void getMyMissiles(View view) {
+
+		startActivity(new Intent(SendMissileActivity.this,
+				MyMissilesActivity.class));
+	}
+
 }

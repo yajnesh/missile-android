@@ -39,6 +39,7 @@ public class SupportArrayAdapter<T> extends ArrayAdapter<T> {
 		}
 	}
 
+	
 	public LayoutInflater getLayoutInflater() {
 		return mInflater;
 	}

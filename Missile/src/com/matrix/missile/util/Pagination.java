@@ -12,22 +12,25 @@ import com.loopj.android.http.RequestParams;
 import com.matrix.missile.controller.adapter.ViewMissileAdapter;
 import com.matrix.missile.model.Missile;
 
-public class Pagination  extends JsonHttpResponseHandler implements OnScrollListener{
+public class Pagination extends JsonHttpResponseHandler implements
+		OnScrollListener {
 	private String mUrl;
 	private ViewMissileAdapter mAdapter;
 	private ListView mListView;
-	private int pageNo=1;
+	private int pageNo = 1;
 	private int PAGE_COUNT = 20;
 	private int THRESHOLD = 5;
-	public Pagination(ListView listView,ViewMissileAdapter viewMissileAdapter,String url){
-		mListView=listView;
-		mAdapter=viewMissileAdapter;
-		mUrl=url;
+
+	public Pagination(ListView listView, ViewMissileAdapter viewMissileAdapter,
+			String url) {
+		mListView = listView;
+		mAdapter = viewMissileAdapter;
+		mUrl = url;
 	}
+
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-	
-		
+
 	}
 
 	@Override
@@ -42,14 +45,13 @@ public class Pagination  extends JsonHttpResponseHandler implements OnScrollList
 			getMissileFromServer();
 		}
 	}
-	
+
 	public void getMissileFromServer() {
 		RequestParams requestParams = new RequestParams("page",
 				String.valueOf(pageNo));
-		MissileRestClient.get(mUrl, requestParams,
-				this);
+		MissileRestClient.get(mUrl, requestParams, this);
 	}
-	
+
 	@Override
 	public void onSuccess(JSONArray missilesJsonArray) {
 		Gson gson = new Gson();
@@ -57,5 +59,7 @@ public class Pagination  extends JsonHttpResponseHandler implements OnScrollList
 				Missile[].class);
 		mAdapter.supportAddAll(missiles);
 	}
+	
+	
 
 }
