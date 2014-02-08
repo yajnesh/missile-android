@@ -2,23 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/missile_lis"
+    android:background="@drawable/missile_list_background"
     android:descendantFocusability="blocksDescendants"
     android:orientation="vertical" >
 
     <com.matrix.missile.view.customviews.CustomeTextView
         android:id="@+id/tvTitle"
+        style="@style/titleStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:singleLine="true" />
 
     <com.matrix.missile.view.customviews.CustomeTextView
         android:id="@+id/tvMessage"
+        style="@style/messageStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvTitle"
-        android:maxLines="3"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_below="@id/tvTitle" />
 
 </RelativeLayout>
