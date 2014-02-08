@@ -11,5 +11,8 @@
     <string name="get_missile">Get missile</string>
     <string name="title_activity_missile">Missile</string>
     <string name="title_activity_tags">TagsActivity</string>
+    <string name="title_activity_home_screen">Missile</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 
 </resources>
