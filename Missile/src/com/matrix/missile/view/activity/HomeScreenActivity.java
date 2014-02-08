@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -19,7 +20,8 @@ import com.matrix.missile.controller.adapter.NavBarAdapter;
 import com.matrix.missile.controller.adapter.StartModule;
 import com.matrix.missile.model.NavigationDrawerModel;
 
-public class HomeScreenActivity extends FragmentActivity {
+public class HomeScreenActivity extends FragmentActivity implements
+		OnItemClickListener {
 
 	// Holds unique tags from database
 	private ArrayList<NavigationDrawerModel> tags;
@@ -46,7 +48,7 @@ public class HomeScreenActivity extends FragmentActivity {
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
 
-		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+		mDrawerList.setOnItemClickListener(this);
 
 		// enable ActionBar app icon to behave as action to toggle nav drawer
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -83,65 +85,14 @@ public class HomeScreenActivity extends FragmentActivity {
 	 * ArrayList<NavigationDrawerModel> tags;
 	 */
 	private void setNavigationListAdapter() {
-		navigationListAdapter = new NavBarAdapter(this,
-				R.layout.drawer_list_item, tags);
+		navigationListAdapter = new NavBarAdapter(this);
+		navigationListAdapter.supportAddAll(tags);
 		if (tags != null || tags.size() > 0) {
 			mDrawerList.setAdapter(navigationListAdapter);
 		}
 
 	}
 
-	private class DrawerItemClickListener implements
-			ListView.OnItemClickListener {
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			mDrawerList.setItemChecked(position, true);
-			mDrawerLayout.closeDrawer(mDrawerList);
-			setTitle(tags.get(position).getNavItem());
-			switch (position) {
-			case 0:
-
-				showMissileList();
-				break;
-			case 1:
-				MyMissilesFragment myMissilesActivity = new MyMissilesFragment();
-				StartModule.setFragmentLayout(getSupportFragmentManager(),
-						myMissilesActivity, null, "My Missile");
-				break;
-			case 2:
-				Toast.makeText(getApplicationContext(), "Not yet implemented",
-						Toast.LENGTH_LONG).show();
-				break;
-
-			case 3:
-				SendMissileFragment sendMissileActivity = new SendMissileFragment();
-				StartModule.setFragmentLayout(getSupportFragmentManager(),
-						sendMissileActivity, null, "Launch Missile");
-				break;
-			}
-
-		}
-
-		// Toast.makeText(HomeScreenActivity.this , position + " " + id,
-		// Toast.LENGTH_LONG).show();
-	}
-
-	/*
-	 * private void replaceFragment(String fragmentArgsValue) {
-	 * 
-	 * // After changing to support.v4 , each time NoteListFragment has to be //
-	 * instantiated. Any fixes? noteListFragment = new NoteListFragment();
-	 * 
-	 * Bundle bundle = new Bundle();
-	 * bundle.putString(ConstantDefinitions.FRAGMENT_ARGS_TAGNAME_CALLER,
-	 * fragmentArgsValue); noteListFragment.setArguments(bundle);
-	 * 
-	 * FragmentManager fragmentManager = getSupportFragmentManager();
-	 * 
-	 * fragmentManager.beginTransaction() .replace(R.id.frame_container,
-	 * noteListFragment) .commitAllowingStateLoss(); }
-	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -177,7 +128,7 @@ public class HomeScreenActivity extends FragmentActivity {
 		setNavigationListAdapter();
 		// showMissileList();
 
-		//By default selece first item
+		// By default selece first item
 		setTitle(tags.get(0).getNavItem());
 		showMissileList();
 
@@ -210,6 +161,35 @@ public class HomeScreenActivity extends FragmentActivity {
 			ft.executePendingTransactions();
 		}
 		super.onBackPressed();
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		mDrawerList.setItemChecked(position, true);
+		mDrawerLayout.closeDrawer(mDrawerList);
+		navigationListAdapter.changeSelected(position);
+		switch (position) {
+		case 0:
+			showMissileList();
+			break;
+		case 1:
+			MyMissilesFragment myMissilesActivity = new MyMissilesFragment();
+			StartModule.setFragmentLayout(getSupportFragmentManager(),
+					myMissilesActivity, null, "My Missile");
+			break;
+		case 2:
+			Toast.makeText(getApplicationContext(), "Not yet implemented",
+					Toast.LENGTH_LONG).show();
+			break;
+
+		case 3:
+			SendMissileFragment sendMissileActivity = new SendMissileFragment();
+			StartModule.setFragmentLayout(getSupportFragmentManager(),
+					sendMissileActivity, null, "Launch Missile");
+			break;
+		}
+
 	}
 
 }

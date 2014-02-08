@@ -9,5 +9,7 @@
     <color name="theme_color_sub">#0f7d3e</color>
     <color name="indicator">#72e2a1</color>
     <color name="text_muted">#54595c</color>
+    <color name="menu_background">#1c1d22</color>
+    <color name="manu_item_selected">#800f7d3e</color>
 
 </resources>
