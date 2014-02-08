@@ -1,10 +1,53 @@
 package com.matrix.missile.model;
 
-public class Missile {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Missile implements Parcelable {
 	private int id;
 	private String title;
 	private String message;
 	private String time;
+
+	public Missile() {
+
+	}
+
+	public Missile(Parcel in) {
+		readFromParcel(in);
+	}
+
+	private void readFromParcel(Parcel in) {
+		id = in.readInt();
+		title = in.readString();
+		message = in.readString();
+		time = in.readString();
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(id);
+		dest.writeString(title);
+		dest.writeString(message);
+		dest.writeString(time);
+	}
+
+	public static final Parcelable.Creator<Missile> CREATOR = new Parcelable.Creator<Missile>() {
+
+		public Missile createFromParcel(Parcel in) {
+			return new Missile(in);
+		}
+
+		public Missile[] newArray(int size) {
+			return new Missile[size];
+		}
+
+	};
 
 	public int getId() {
 		return id;

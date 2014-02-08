@@ -3,15 +3,19 @@ package com.matrix.missile.activity;
 import org.json.JSONArray;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.matrix.missile.MissileActivity;
 import com.matrix.missile.MissileRestClient;
 import com.matrix.missile.R;
 import com.matrix.missile.adapter.ViewMissileAdapter;
@@ -39,7 +43,19 @@ public class ViewMissilesActivity extends Activity implements OnScrollListener {
 		mViewMissileAdapter = new ViewMissileAdapter(ViewMissilesActivity.this);
 		listView.setAdapter(mViewMissileAdapter);
 		listView.setOnScrollListener(this);
+		listView.setOnItemClickListener(listener);
 	}
+
+	OnItemClickListener listener = new android.widget.AdapterView.OnItemClickListener() {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			Missile missile = (Missile) listView.getItemAtPosition(position);
+			Intent intent=new Intent(ViewMissilesActivity.this,MissileActivity.class);
+			intent.putExtra("missile",missile);
+			startActivity(intent);
+		}
+	};
 
 	private void getMissileFromServer(int num) {
 		RequestParams requestParams = new RequestParams("page",
@@ -54,33 +70,19 @@ public class ViewMissilesActivity extends Activity implements OnScrollListener {
 			Gson gson = new Gson();
 			Missile[] missiles = gson.fromJson(missilesJsonArray.toString(),
 					Missile[].class);
-			Log.e("missile", "p" + missiles.length + " count :"
-					+ mViewMissileAdapter.getCount());
 			mViewMissileAdapter.supportAddAll(missiles);
-//			for (Missile missile : missiles) {
-//				Log.e(LOG_TAG, missile.getTitle());
-//			}
 		}
 	};
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
-		String tag = "scroll";
-		// Log.e(tag, "onscroll: firVisItm:" + firstVisibleItem +
-		// " visItemCoun: "
-		// + visibleItemCount + " totItmCou: " + totalItemCount);
-		//final int currentFirstVisibleItem = listView.getFirstVisiblePosition();
-//		Log.e(tag, "currentFirstVisibleItem: " + currentFirstVisibleItem);
-//		Log.e(tag, "lastVisiblePosition :" + listView.getLastVisiblePosition());
-		// Log.e(tag,
-		// "Diff " + (totalItemCount - listView.getLastVisiblePosition()));
+
 		if (pageNo * PAGE_COUNT > totalItemCount)
 			return;
 
 		if ((totalItemCount - listView.getLastVisiblePosition()) <= THRESHOLD) {
 			pageNo++;
-			Log.e(tag, "Server :" + pageNo);
 			getMissileFromServer(pageNo);
 		}
 	}
