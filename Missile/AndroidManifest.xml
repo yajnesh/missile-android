@@ -34,7 +34,7 @@
             android:label="@string/title_activity_missile" >
         </activity>
         <activity
-            android:name="com.matrix.missile.MyMissilesActivity"
+            android:name="com.matrix.missile.view.activity.MyMissilesActivity"
             android:label="@string/title_activity_my_missiles" >
         </activity>
     </application>

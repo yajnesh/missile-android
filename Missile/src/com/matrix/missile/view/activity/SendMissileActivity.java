@@ -21,7 +21,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.matrix.missile.MyMissilesActivity;
 import com.matrix.missile.R;
 import com.matrix.missile.model.Missile;
 import com.matrix.missile.util.MissileRestClient;

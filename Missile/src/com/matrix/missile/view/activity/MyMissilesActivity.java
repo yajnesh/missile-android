@@ -1,4 +1,4 @@
-package com.matrix.missile;
+package com.matrix.missile.view.activity;
 
 import java.util.List;
 
@@ -18,14 +18,13 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.matrix.missile.R;
 import com.matrix.missile.controller.adapter.ViewMissileAdapter;
 import com.matrix.missile.model.Missile;
 import com.matrix.missile.util.MissileRestClient;
 import com.matrix.missile.util.db.MissileIdDataSource;
-import com.matrix.missile.view.activity.MissileActivity;
 
 public class MyMissilesActivity extends Activity {
-	protected static final String LOG_TAG = "ViewMissilesActivity";
 	private ViewMissileAdapter mViewMissileAdapter;
 	private ListView listView;
 	private MissileIdDataSource datasource;
@@ -65,7 +64,6 @@ public class MyMissilesActivity extends Activity {
 		RequestParams requestParams = new RequestParams("ids", list.toString());
 		MissileRestClient.get("missiles/by_ids.json", requestParams,
 				jsonResponseHandler);
-
 	}
 
 	private JsonHttpResponseHandler jsonResponseHandler = new JsonHttpResponseHandler() {
