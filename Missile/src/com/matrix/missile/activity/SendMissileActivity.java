@@ -67,7 +67,7 @@ public class SendMissileActivity extends Activity implements OnClickListener {
 			Log.e(Tag, e1.getMessage());
 			e1.printStackTrace();
 		}
-		MissileRestClient.post(SendMissileActivity.this, "", entity,
+		MissileRestClient.post(SendMissileActivity.this, "missiles.json", entity,
 				jsonHttpPostResponseHandler);
 	}
 
