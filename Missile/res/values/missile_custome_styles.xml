@@ -38,4 +38,18 @@
         <item name="isItalic">true</item>
     </style>
 
+    <style name="navigationDrawerBackgroundStyle">
+        <item name="android:background">@drawable/navigation_menu_bg</item>
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:divider">@color/main_font_color</item>
+        <item name="android:listSelector">@drawable/selectable_background_missile</item>
+        <item name="android:drawSelectorOnTop">true</item>
+    </style>
+
+    <style name="navigationDrawerItem">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:padding">@dimen/double_padding</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+    </style>
+
 </resources>
