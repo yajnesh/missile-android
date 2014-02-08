@@ -98,9 +98,10 @@ public class HomeScreenActivity extends FragmentActivity {
 				long id) {
 			mDrawerList.setItemChecked(position, true);
 			mDrawerLayout.closeDrawer(mDrawerList);
-
+			setTitle(tags.get(position).getNavItem());
 			switch (position) {
 			case 0:
+
 				showMissileList();
 				break;
 			case 1:
@@ -174,7 +175,12 @@ public class HomeScreenActivity extends FragmentActivity {
 		generateStaticNavBarItems();
 		setNavigationBar();
 		setNavigationListAdapter();
+		// showMissileList();
+
+		//By default selece first item
+		setTitle(tags.get(0).getNavItem());
 		showMissileList();
+
 	}
 
 	private void generateStaticNavBarItems() {

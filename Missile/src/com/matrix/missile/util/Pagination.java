@@ -2,6 +2,9 @@ package com.matrix.missile.util;
 
 import org.json.JSONArray;
 
+import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
@@ -21,11 +24,23 @@ public class Pagination extends JsonHttpResponseHandler implements
 	private int PAGE_COUNT = 20;
 	private int THRESHOLD = 5;
 
+//	// CallBack to hide/show progressBar
+//	public interface OnScrollCallback {
+//		public void showWhatsHot();
+//
+//		public void hideWhatsHot();
+//	}
+//
+//	OnScrollCallback onScrollListener;
+
+	
+	
 	public Pagination(ListView listView, ViewMissileAdapter viewMissileAdapter,
 			String url) {
 		mListView = listView;
 		mAdapter = viewMissileAdapter;
 		mUrl = url;
+		//this.onScrollListener=onScrollCallback;
 	}
 
 	@Override
@@ -33,9 +48,21 @@ public class Pagination extends JsonHttpResponseHandler implements
 
 	}
 
+//	private int mLastFirstVisibleItem;
+
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
+//		int currentFirstVisibleItem = mListView.getFirstVisiblePosition();
+//Log.e("ScrollTest", currentFirstVisibleItem+ "" );
+//			if (mListView.getLastVisiblePosition() != totalItemCount ) {
+//			if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+//				onScrollListener.hideWhatsHot();
+//			} else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+//				onScrollListener.showWhatsHot();
+//			}
+//		}
+//		mLastFirstVisibleItem = currentFirstVisibleItem;
 
 		if (pageNo * PAGE_COUNT > totalItemCount)
 			return;
@@ -59,7 +86,5 @@ public class Pagination extends JsonHttpResponseHandler implements
 				Missile[].class);
 		mAdapter.supportAddAll(missiles);
 	}
-	
-	
 
 }
