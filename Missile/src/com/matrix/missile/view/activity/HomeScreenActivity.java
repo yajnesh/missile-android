@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.matrix.missile.R;
 import com.matrix.missile.controller.adapter.NavBarAdapter;
+import com.matrix.missile.controller.adapter.StartModule;
 import com.matrix.missile.model.NavigationDrawerModel;
 
 public class HomeScreenActivity extends FragmentActivity {
@@ -82,7 +83,6 @@ public class HomeScreenActivity extends FragmentActivity {
 	 * ArrayList<NavigationDrawerModel> tags;
 	 */
 	private void setNavigationListAdapter() {
-
 		navigationListAdapter = new NavBarAdapter(this,
 				R.layout.drawer_list_item, tags);
 		if (tags != null || tags.size() > 0) {
@@ -102,32 +102,21 @@ public class HomeScreenActivity extends FragmentActivity {
 			switch (position) {
 			case 0:
 				showMissileList();
-
 				break;
-
 			case 1:
 				MyMissilesFragment myMissilesActivity = new MyMissilesFragment();
-				FragmentManager fragmentManager3 = getSupportFragmentManager();
-				fragmentManager3.beginTransaction()
-						.replace(R.id.frame_container, myMissilesActivity)
-						.commit();
-
+				StartModule.setFragmentLayout(getSupportFragmentManager(),
+						myMissilesActivity, null, "My Missile");
 				break;
-
 			case 2:
-
 				Toast.makeText(getApplicationContext(), "Not yet implemented",
 						Toast.LENGTH_LONG).show();
+				break;
 
 			case 3:
 				SendMissileFragment sendMissileActivity = new SendMissileFragment();
-
-				FragmentManager fragmentManager2 = getSupportFragmentManager();
-
-				fragmentManager2.beginTransaction()
-						.replace(R.id.frame_container, sendMissileActivity)
-						.commit();
-
+				StartModule.setFragmentLayout(getSupportFragmentManager(),
+						sendMissileActivity, null, "Launch Missile");
 				break;
 			}
 
@@ -182,7 +171,6 @@ public class HomeScreenActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_screen_layout);
 		initialize();
-
 		generateStaticNavBarItems();
 		setNavigationBar();
 		setNavigationListAdapter();
@@ -193,7 +181,7 @@ public class HomeScreenActivity extends FragmentActivity {
 		tags.add(getNavigationDrawerModel("Live Missiles"));
 		tags.add(getNavigationDrawerModel("My Missiles"));
 		tags.add(getNavigationDrawerModel("#tags"));
-		tags.add(getNavigationDrawerModel("Send Missile"));
+		tags.add(getNavigationDrawerModel("Launch Missile"));
 	}
 
 	private void initialize() {
@@ -201,17 +189,21 @@ public class HomeScreenActivity extends FragmentActivity {
 	}
 
 	private void showMissileList() {
-		ViewMissilesFragment viewMissileFragment = new ViewMissilesFragment();
-
+		ViewMissilesFragment viewMissilesFragment = new ViewMissilesFragment();
 		Bundle bundle = new Bundle();
-
 		bundle.putString("url", "missiles.json");
-		viewMissileFragment.setArguments(bundle);
+		StartModule.setFragmentLayout(getSupportFragmentManager(),
+				viewMissilesFragment, bundle, "Live Missile");
+	}
 
-		FragmentManager fragmentManager = getSupportFragmentManager();
-
-		fragmentManager.beginTransaction()
-				.replace(R.id.frame_container, viewMissileFragment).commit();
+	@Override
+	public void onBackPressed() {
+		FragmentManager ft = getSupportFragmentManager();
+		if (ft.getBackStackEntryCount() == 1) {
+			ft.popBackStackImmediate();
+			ft.executePendingTransactions();
+		}
+		super.onBackPressed();
 	}
 
 }
