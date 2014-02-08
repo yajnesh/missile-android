@@ -56,4 +56,14 @@
         android:text="@string/get_missile"
         android:textSize="18sp" />
 
+    <Button
+        android:id="@+id/btnGetMyMissiles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnGet"
+        android:layout_centerHorizontal="true"
+        android:onClick="getMyMissiles"
+        android:text="My missiles"
+        android:textSize="18sp" />
+
 </RelativeLayout>

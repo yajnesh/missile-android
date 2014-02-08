@@ -11,5 +11,6 @@
     <string name="get_missile">Get missile</string>
     <string name="title_activity_missile">Missile</string>
     <string name="title_activity_tags">TagsActivity</string>
+    <string name="title_activity_my_missiles">MyMissilesActivity</string>
 
 </resources>

@@ -33,6 +33,10 @@
             android:name="com.matrix.missile.view.activity.MissileActivity"
             android:label="@string/title_activity_missile" >
         </activity>
+        <activity
+            android:name="com.matrix.missile.MyMissilesActivity"
+            android:label="@string/title_activity_my_missiles" >
+        </activity>
     </application>
 
 </manifest>
