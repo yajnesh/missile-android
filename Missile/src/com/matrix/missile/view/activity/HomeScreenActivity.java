@@ -2,13 +2,13 @@ package com.matrix.missile.view.activity;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,9 +16,10 @@ import android.widget.ListView;
 
 import com.matrix.missile.R;
 import com.matrix.missile.controller.adapter.NavBarAdapter;
+import com.matrix.missile.model.Missile;
 import com.matrix.missile.model.NavigationDrawerModel;
 
-public class HomeScreenActivity extends Activity {
+public class HomeScreenActivity extends FragmentActivity {
 
 	// Holds unique tags from database
 	private ArrayList<NavigationDrawerModel> tags;
@@ -98,7 +99,42 @@ public class HomeScreenActivity extends Activity {
 				long id) {
 			mDrawerList.setItemChecked(position, true);
 			mDrawerLayout.closeDrawer(mDrawerList);
+
+			switch (position) {
+			case 0:
+				ViewMissilesActivity viewMissileFragment = new ViewMissilesActivity();
+
+				Bundle bundle = new Bundle();
+
+				bundle.putString("url", "missiles.json");
+				viewMissileFragment.setArguments(bundle);
+
+				FragmentManager fragmentManager = getSupportFragmentManager();
+
+				fragmentManager.beginTransaction()
+						.replace(R.id.frame_container, viewMissileFragment)
+						.commit();
+				
+				break;
+				
+			case 3:
+				SendMissileActivity sendMissileActivity =new SendMissileActivity();
+
+
+				FragmentManager fragmentManager2 = getSupportFragmentManager();
+
+				fragmentManager2.beginTransaction()
+						.replace(R.id.frame_container, sendMissileActivity)
+						.commit();
+				
+				break;
+				}
+
+			
 		}
+
+		// Toast.makeText(HomeScreenActivity.this , position + " " + id,
+		// Toast.LENGTH_LONG).show();
 	}
 
 	/*
@@ -157,6 +193,7 @@ public class HomeScreenActivity extends Activity {
 		tags.add(getNavigationDrawerModel("Live Missiles"));
 		tags.add(getNavigationDrawerModel("My Missiles"));
 		tags.add(getNavigationDrawerModel("#tags"));
+		tags.add(getNavigationDrawerModel("Send Missile"));
 	}
 
 	private void initialize() {
