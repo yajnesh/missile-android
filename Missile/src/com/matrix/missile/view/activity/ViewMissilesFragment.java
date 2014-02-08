@@ -7,8 +7,6 @@ import org.json.JSONObject;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +23,7 @@ import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.matrix.missile.R;
+import com.matrix.missile.controller.adapter.StartModule;
 import com.matrix.missile.controller.adapter.ViewMissileAdapter;
 import com.matrix.missile.model.Missile;
 import com.matrix.missile.util.MissileRestClient;
@@ -93,27 +92,13 @@ public class ViewMissilesFragment extends Fragment {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-
-			FragmentManager fragmentManager2 = getFragmentManager();
-			FragmentTransaction fragmentTransaction2 = fragmentManager2
-					.beginTransaction();
-			MissileFragment fragment2 = new MissileFragment();
-
+			MissileFragment missileFragment = new MissileFragment();
 			Missile missile = (Missile) listView.getItemAtPosition(position);
 			Bundle bundle = new Bundle();
 			bundle.putParcelable("missile", missile);
-			fragment2.setArguments(bundle);
-
-			fragmentTransaction2.addToBackStack(null);
-			fragmentTransaction2.hide(ViewMissilesFragment.this);
-			fragmentTransaction2.add(android.R.id.content, fragment2);
-			fragmentTransaction2.commit();
-
-			// Missile missile = (Missile) listView.getItemAtPosition(position);
-			// Intent intent = new Intent(ViewMissilesActivity.this,
-			// MissileActivity.class);
-			// intent.putExtra("missile", missile);
-			// startActivity(intent);
+			missileFragment.setArguments(bundle);
+			StartModule.addFragmentForModule(getFragmentManager(),
+					missileFragment);
 		}
 	};
 
@@ -162,6 +147,8 @@ public class ViewMissilesFragment extends Fragment {
 				mViewMissileAdapter.insert(missiles[i], 0);
 			}
 			mViewMissileAdapter.notifyDataSetChanged();
+			// listView.setSelectionFromTop(listView.getFirstVisiblePosition()
+			// + missiles.length, 10);
 		}
 	};
 
