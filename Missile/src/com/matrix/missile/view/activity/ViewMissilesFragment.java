@@ -4,22 +4,34 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MenuItem.OnActionExpandListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher.ViewFactory;
 
 import com.google.gson.Gson;
@@ -44,13 +56,19 @@ public class ViewMissilesFragment extends Fragment {
 	private Handler handler;
 	private View rootView;
 	private HomeScreenActivity activity;
-
 	private LinearLayout mHeaderView;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		setHasOptionsMenu(true);
+		super.onCreate(savedInstanceState);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
+		activity = (HomeScreenActivity) getActivity();
 		if (rootView != null && rootView.getParent() != null) {
 			FrameLayout vv = (FrameLayout) rootView.getParent();
 			vv.removeView(rootView);
@@ -60,10 +78,15 @@ public class ViewMissilesFragment extends Fragment {
 		rootView = inflater
 				.inflate(R.layout.activity_missile, container, false);
 		mUrl = getArguments().getString("url");
+		isSearchEnabled = getArguments().getBoolean("search");
 		initListView();
-		pagination.getMissileFromServer();
-		getHotMissileFromServer();
-		startRepeatingTask();
+
+		if (!isSearchBarExpanded) {
+			pagination.getMissileFromServer();
+			getHotMissileFromServer();
+			startRepeatingTask();
+		}
+
 		return rootView;
 	}
 
@@ -80,7 +103,7 @@ public class ViewMissilesFragment extends Fragment {
 		listView.setOnScrollListener(pagination);
 		listView.setOnItemClickListener(listener);
 		tvHotMissile = (TextSwitcher) rootView.findViewById(R.id.tvHotMissile);
-		
+
 		mHeaderView = (LinearLayout) rootView.findViewById(R.id.header);
 		// Set the ViewFactory of the TextSwitcher that will create TextView
 		// object when asked
@@ -101,22 +124,37 @@ public class ViewMissilesFragment extends Fragment {
 		// set the animation type of textSwitcher
 		tvHotMissile.setInAnimation(in);
 		tvHotMissile.setOutAnimation(out);
-		
-		mHeaderView.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
 
-				//Toast.makeText(getActivity(), "aa",	Toast.LENGTH_LONG).show();
-				MissileFragment missileFragment = new MissileFragment();
-				Bundle bundle = new Bundle();
-				bundle.putParcelable("missile", (Missile)tvHotMissile.getTag());
-				missileFragment.setArguments(bundle);
-				StartModule.addFragmentForModule(getFragmentManager(),
-				missileFragment);
-			}
-		});
 		handler = new Handler();
+		delaySearchHandler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				if (msg.what == 5) {
+					search((String) msg.obj);
+
+				}
+			}
+		};
+		if (isSearchEnabled) {
+			mHeaderView.setVisibility(View.GONE);
+		} else {
+			mHeaderView.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+
+					// Toast.makeText(getActivity(), "aa",
+					// Toast.LENGTH_LONG).show();
+					MissileFragment missileFragment = new MissileFragment();
+					Bundle bundle = new Bundle();
+					bundle.putParcelable("missile",
+							(Missile) tvHotMissile.getTag());
+					missileFragment.setArguments(bundle);
+					StartModule.addFragmentForModule(getFragmentManager(),
+							missileFragment);
+				}
+			});
+		}
 	}
 
 	OnItemClickListener listener = new android.widget.AdapterView.OnItemClickListener() {
@@ -209,5 +247,163 @@ public class ViewMissilesFragment extends Fragment {
 
 	private void stopRepeatingTask() {
 		handler.removeCallbacks(mStatusChecker);
+	}
+
+	private Boolean isSearchEnabled = false;
+
+	@Override
+	public void onPause() {
+		stopRepeatingTask();
+		super.onPause();
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.search_enabled:
+			if (!isSearchEnabled) {
+				ViewMissilesFragment viewMissilesFragment = new ViewMissilesFragment();
+				Bundle bundle = new Bundle();
+				bundle.putString("url", "missiles/search/.json");
+				bundle.putBoolean("search", true);
+				viewMissilesFragment.setArguments(bundle);
+				StartModule.addFragmentForModule(getFragmentManager(),
+						viewMissilesFragment);
+			}
+			// http://localhost:3000/missiles/search/yaj.json
+			break;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.home_screen_activity, menu);
+		// Log.d("missile", "craete options");
+		setSearchBar(menu);
+		// setSortSpinner(menu);
+
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	public boolean isSearchBarExpanded = false;
+	private MenuItem searchItem;
+	private Handler delaySearchHandler;
+
+	private void setSearchBar(Menu menu) {
+
+		// menu.findItem(R.id.action_bar);
+
+		searchItem = menu.findItem(R.id.action_search);
+		SearchView searchView = (SearchView) searchItem.getActionView();
+
+		searchItem.setOnActionExpandListener(new OnActionExpandListener() {
+
+			@Override
+			public boolean onMenuItemActionExpand(MenuItem item) {
+				isSearchBarExpanded = true;
+				activity.getDrawerLayout().setDrawerLockMode(
+						DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+				return true;
+			}
+
+			@Override
+			public boolean onMenuItemActionCollapse(MenuItem item) {
+				isSearchBarExpanded = false;
+				// Enable drawer opening by left-to-right swipe while
+				// search bar is collapsed
+				activity.getDrawerLayout().setDrawerLockMode(
+						DrawerLayout.LOCK_MODE_UNLOCKED);
+				return true;
+
+			}
+		});
+
+		searchView.setOnQueryTextListener(new OnQueryTextListener() {
+
+			@Override
+			public boolean onQueryTextSubmit(String key) {
+
+				if (key != null && key.length() > 0) {
+					search(key);
+					hideVirtualKeyBoard();
+				}
+				return true;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String key) {
+
+				if (key == null || key.length() == 0) {
+					if (!activity.isDrawerOpen && isSearchBarExpanded) {
+						// selectItem(lastSelectedItemPosition);
+					}
+				} else {
+
+					delaySearchHandler.removeMessages(5);
+					final Message msg = Message.obtain(delaySearchHandler, 5,
+							key);
+					delaySearchHandler.sendMessageDelayed(msg, 750);
+
+				}
+
+				return true;
+			}
+		});
+
+	}
+
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		menu.findItem(R.id.action_search).setVisible(isSearchEnabled);
+		menu.findItem(R.id.search_enabled).setVisible(!isSearchEnabled);
+	}
+
+	private void search(String key) {
+		RequestParams requestParams = new RequestParams("page", 1);
+		MissileRestClient.get("missiles/search/" + key + ".json",
+				requestParams, jsonSearchMissileResponseHandler);
+
+		Toast.makeText(getActivity(), key, Toast.LENGTH_SHORT).show();
+
+	}
+
+	private JsonHttpResponseHandler jsonSearchMissileResponseHandler = new JsonHttpResponseHandler() {
+		@Override
+		public void onSuccess(JSONArray missilesJsonArray) {
+			Gson gson = new Gson();
+			Missile[] missiles = gson.fromJson(missilesJsonArray.toString(),
+					Missile[].class);
+			mViewMissileAdapter.clear();
+			mViewMissileAdapter.supportAddAll(missiles);
+			// listView.setSelectionFromTop(listView.getFirstVisiblePosition()
+			// + missiles.length, 10);
+		}
+
+		public void onFailure(int statusCode, Throwable e,
+				JSONObject errorResponse) {
+			mViewMissileAdapter.clear();
+		};
+	};
+
+	// public void getMissileFromServer() {
+	// RequestParams requestParams = new RequestParams("page",
+	// String.valueOf(pageNo));
+	// MissileRestClient.get(mUrl, requestParams, this);
+	// }
+
+	/**
+	 * hides the soft keyboard
+	 */
+	private void hideVirtualKeyBoard() {
+		InputMethodManager inputManager = (InputMethodManager) getActivity()
+				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()
+				.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 	}
 }

@@ -40,7 +40,7 @@ public class HomeScreenActivity extends FragmentActivity implements
 	private CharSequence mDrawerTitle;
 	private CharSequence mAppTitle;
 	private ListView mDrawerList;
-	private boolean isDrawerOpen = false;
+	public boolean isDrawerOpen = false;
 	private MenuItem searchItem;
 	private Handler delaySearchHandler;
 
@@ -154,16 +154,6 @@ public class HomeScreenActivity extends FragmentActivity implements
 
 	private void initialize() {
 		tags = new ArrayList<NavigationDrawerModel>();
-
-		delaySearchHandler = new Handler() {
-			@Override
-			public void handleMessage(Message msg) {
-				if (msg.what == 5) {
-					search((String) msg.obj);
-
-				}
-			}
-		};
 	}
 
 	private void showMissileList() {
@@ -190,7 +180,7 @@ public class HomeScreenActivity extends FragmentActivity implements
 		mDrawerList.setItemChecked(position, true);
 		mDrawerLayout.closeDrawer(mDrawerList);
 		navigationListAdapter.changeSelected(position);
-		
+
 		setTitle(tags.get(position).getNavItem());
 		switch (position) {
 		case 0:
@@ -215,95 +205,8 @@ public class HomeScreenActivity extends FragmentActivity implements
 
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.home_screen_activity, menu);
-
-		setSearchBar(menu);
-		// setSortSpinner(menu);
-
-		return super.onCreateOptionsMenu(menu);
+	public DrawerLayout getDrawerLayout() {
+		return mDrawerLayout;
 	}
 
-	protected boolean isSearchBarExpanded = false;
-
-	private void setSearchBar(Menu menu) {
-
-		// menu.findItem(R.id.action_bar);
-
-		searchItem = menu.findItem(R.id.action_search);
-		SearchView searchView = (SearchView) searchItem.getActionView();
-
-		searchItem.setOnActionExpandListener(new OnActionExpandListener() {
-
-			@Override
-			public boolean onMenuItemActionExpand(MenuItem item) {
-				isSearchBarExpanded = true;
-				mDrawerLayout
-						.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-				return true;
-			}
-
-			@Override
-			public boolean onMenuItemActionCollapse(MenuItem item) {
-				isSearchBarExpanded = false;
-				// Enable drawer opening by left-to-right swipe while
-				// search bar is collapsed
-				mDrawerLayout
-						.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-				return true;
-
-			}
-		});
-
-		searchView.setOnQueryTextListener(new OnQueryTextListener() {
-
-			@Override
-			public boolean onQueryTextSubmit(String key) {
-
-				if (key != null && key.length() > 0) {
-					search(key);
-					hideVirtualKeyBoard();
-				}
-				return true;
-			}
-
-			
-
-			@Override
-			public boolean onQueryTextChange(String key) {
-
-				if (key == null || key.length() == 0) {
-					if (!isDrawerOpen && isSearchBarExpanded) {
-						// selectItem(lastSelectedItemPosition);
-					}
-				} else {
-
-					delaySearchHandler.removeMessages(5);
-					final Message msg = Message.obtain(delaySearchHandler, 5,
-							key);
-					delaySearchHandler.sendMessageDelayed(msg, 750);
-
-				}
-
-				return true;
-			}
-		});
-
-	}
-
-	/**
-	 * hides the soft keyboard
-	 */
-	private void hideVirtualKeyBoard() {
-		InputMethodManager inputManager = (InputMethodManager) this
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
-		inputManager.hideSoftInputFromWindow(this.getCurrentFocus()
-				.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-	}
-	
-	private void search(String key) {
-
-		Toast.makeText(this, key, Toast.LENGTH_SHORT).show();
-	}
 }
