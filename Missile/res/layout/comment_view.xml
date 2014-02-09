@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:orientation="horizontal"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp" >
+
+    <com.matrix.missile.view.customviews.CustomeEditText
+        android:id="@+id/commentEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:gravity="center"
+        android:imeOptions="actionSend"
+        android:inputType="textNoSuggestions"
+        android:maxLength="10"
+        android:singleLine="true" />
+
+    <ImageButton
+        android:id="@+id/submitImageButton"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:src="@drawable/ic_action_send_now" />
+
+</LinearLayout>

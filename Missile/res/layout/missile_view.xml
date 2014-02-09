@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/missile_list_background"
+    android:orientation="vertical" >
+
+    <com.matrix.missile.view.customviews.CustomeTextView
+        android:id="@+id/tvTitle"
+        style="@style/titleStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.matrix.missile.view.customviews.component.LinkEnabledTextView
+        android:id="@+id/tvMessage"
+        style="@style/messageStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.matrix.missile.view.customviews.CustomeTextView
+        android:id="@+id/tvTime"
+        style="@style/lowPriorityStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right" />
+
+</LinearLayout>
