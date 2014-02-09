@@ -2,25 +2,19 @@ package com.matrix.missile.view.activity;
 
 import java.util.ArrayList;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MenuItem.OnActionExpandListener;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Toast;
 
 import com.matrix.missile.R;
@@ -150,6 +144,7 @@ public class HomeScreenActivity extends FragmentActivity implements
 		tags.add(getNavigationDrawerModel("My Missiles"));
 		tags.add(getNavigationDrawerModel("#tags"));
 		tags.add(getNavigationDrawerModel("Launch Missile"));
+		tags.add(getNavigationDrawerModel("About"));
 	}
 
 	private void initialize() {
@@ -201,6 +196,8 @@ public class HomeScreenActivity extends FragmentActivity implements
 			StartModule.setFragmentLayout(getSupportFragmentManager(),
 					sendMissileActivity, null, "Launch Missile");
 			break;
+		case 4:
+			startActivity(new Intent(HomeScreenActivity.this,AboutAvtivity.class));
 		}
 
 	}
