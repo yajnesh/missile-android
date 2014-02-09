@@ -155,6 +155,8 @@ public class HomeScreenActivity extends FragmentActivity implements
 		ViewMissilesFragment viewMissilesFragment = new ViewMissilesFragment();
 		Bundle bundle = new Bundle();
 		bundle.putString("url", "missiles.json");
+		bundle.putBoolean("viewall", true);
+		bundle.putBoolean("search", false);
 		StartModule.setFragmentLayout(getSupportFragmentManager(),
 				viewMissilesFragment, bundle, "Live Missile");
 	}
@@ -187,8 +189,9 @@ public class HomeScreenActivity extends FragmentActivity implements
 					myMissilesActivity, null, "My Missile");
 			break;
 		case 2:
-			Toast.makeText(getApplicationContext(), "Not yet implemented",
-					Toast.LENGTH_LONG).show();
+			TagsFragment tagsFragment = new TagsFragment();
+			StartModule.setFragmentLayout(getSupportFragmentManager(),
+					tagsFragment, null, "Tags");
 			break;
 
 		case 3:

@@ -16,5 +16,6 @@
     <string name="add">Add</string>
     <string name="title_activity_about_avtivity">About Missile</string>
     <string name="hello_world">Hello world!</string>
+    <string name="loading_">Loading...</string>
 
 </resources>

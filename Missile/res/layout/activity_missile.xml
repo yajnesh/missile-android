@@ -23,8 +23,9 @@
         style="@style/headerStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical" >
+        android:layout_below="@+id/tvEmpty"
+        android:orientation="vertical"
+        android:visibility="invisible" >
 
         <com.matrix.missile.view.customviews.CustomeTextView
             style="@style/subHeadingStyle"
@@ -37,5 +38,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal"
+        android:padding="8dp"
+        android:text="@string/loading_"
+        android:textSize="18sp" />
 
 </RelativeLayout>

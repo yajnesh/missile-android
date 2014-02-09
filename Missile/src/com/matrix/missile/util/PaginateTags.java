@@ -7,38 +7,26 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 
-import com.google.gson.Gson;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-import com.matrix.missile.controller.adapter.ViewMissileAdapter;
-import com.matrix.missile.model.Missile;
+import com.matrix.missile.controller.adapter.TagsAdapter;
 
-public class Pagination extends JsonHttpResponseHandler implements
+public class PaginateTags extends JsonHttpResponseHandler implements
 		OnScrollListener {
 	private String mUrl;
-	private ViewMissileAdapter mAdapter;
+	private TagsAdapter mAdapter;
 	private ListView mListView;
 	private int pageNo = 1;
 	private int PAGE_COUNT = 20;
 	private int THRESHOLD = 5;
 	private NetworkListener networkListener;
 
-	// // CallBack to hide/show progressBar
-	// public interface OnScrollCallback {
-	// public void showWhatsHot();
-	//
-	// public void hideWhatsHot();
-	// }
-	//
-	// OnScrollCallback onScrollListener;
-
-	public Pagination(ListView listView, ViewMissileAdapter viewMissileAdapter,
-			String url, NetworkListener listener) {
+	public PaginateTags(ListView listView, TagsAdapter tagsAdapter, String url,
+			NetworkListener listener) {
 		mListView = listView;
-		mAdapter = viewMissileAdapter;
+		mAdapter = tagsAdapter;
 		mUrl = url;
 		networkListener = listener;
-		// this.onScrollListener=onScrollCallback;
 	}
 
 	@Override
@@ -46,32 +34,20 @@ public class Pagination extends JsonHttpResponseHandler implements
 
 	}
 
-	// private int mLastFirstVisibleItem;
-
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
-		// int currentFirstVisibleItem = mListView.getFirstVisiblePosition();
-		// Log.e("ScrollTest", currentFirstVisibleItem+ "" );
-		// if (mListView.getLastVisiblePosition() != totalItemCount ) {
-		// if (currentFirstVisibleItem > mLastFirstVisibleItem) {
-		// onScrollListener.hideWhatsHot();
-		// } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
-		// onScrollListener.showWhatsHot();
-		// }
-		// }
-		// mLastFirstVisibleItem = currentFirstVisibleItem;
 
 		if (pageNo * PAGE_COUNT > totalItemCount)
 			return;
 
 		if ((totalItemCount - mListView.getLastVisiblePosition()) <= THRESHOLD) {
 			pageNo++;
-			getMissileFromServer();
+			getTagFromServer();
 		}
 	}
 
-	public void getMissileFromServer() {
+	public void getTagFromServer() {
 		RequestParams requestParams = new RequestParams("page",
 				String.valueOf(pageNo));
 		MissileRestClient.get(mUrl, requestParams, this);
@@ -79,10 +55,13 @@ public class Pagination extends JsonHttpResponseHandler implements
 
 	@Override
 	public void onSuccess(JSONArray missilesJsonArray) {
-		Gson gson = new Gson();
-		Missile[] missiles = gson.fromJson(missilesJsonArray.toString(),
-				Missile[].class);
-		mAdapter.supportAddAll(missiles);
+		String tags = missilesJsonArray.toString();
+		tags = tags.replace("[", "");
+		tags = tags.replace("]", "");
+		tags = tags.replace("\"", "");
+
+		String str[] = tags.split(",");
+		mAdapter.supportAddAll(str);
 		networkListener.requestStatus(true);
 	}
 
