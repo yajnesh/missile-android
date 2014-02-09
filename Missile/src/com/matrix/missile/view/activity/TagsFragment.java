@@ -9,14 +9,17 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.matrix.missile.R;
 import com.matrix.missile.controller.adapter.StartModule;
 import com.matrix.missile.controller.adapter.TagsAdapter;
+import com.matrix.missile.util.NetworkListener;
 import com.matrix.missile.util.PaginateTags;
 
-public class TagsFragment extends Fragment {
+public class TagsFragment extends Fragment implements NetworkListener {
 	private ListView listView;
+	private TextView txtEmpty;
 	private View rootView;
 	private TagsAdapter tagsAdapter;
 	private PaginateTags pagination;
@@ -38,11 +41,12 @@ public class TagsFragment extends Fragment {
 
 	private void initListView() {
 		listView = (ListView) rootView.findViewById(R.id.list);
+		txtEmpty = (TextView) rootView.findViewById(R.id.tvEmpty);
 		tagsAdapter = new TagsAdapter(getActivity());
 		listView.setAdapter(tagsAdapter);
 		listView.setOnScrollListener(pagination);
 		listView.setOnItemClickListener(listener);
-		pagination = new PaginateTags(listView, tagsAdapter, "tags.json");
+		pagination = new PaginateTags(listView, tagsAdapter, "tags.json", this);
 	}
 
 	private OnItemClickListener listener = new android.widget.AdapterView.OnItemClickListener() {
@@ -60,4 +64,13 @@ public class TagsFragment extends Fragment {
 					viewMissilesFragment);
 		}
 	};
+
+	@Override
+	public void requestStatus(Boolean status) {
+		if (status) {
+			txtEmpty.setVisibility(View.GONE);
+		} else {
+			txtEmpty.setText("No tags found!");
+		}
+	}
 }

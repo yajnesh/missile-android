@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,7 +30,6 @@ import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewSwitcher.ViewFactory;
 
 import com.google.gson.Gson;
@@ -42,17 +40,19 @@ import com.matrix.missile.controller.adapter.StartModule;
 import com.matrix.missile.controller.adapter.ViewMissileAdapter;
 import com.matrix.missile.model.Missile;
 import com.matrix.missile.util.MissileRestClient;
+import com.matrix.missile.util.NetworkListener;
 import com.matrix.missile.util.Pagination;
 
-public class ViewMissilesFragment extends Fragment {
+public class ViewMissilesFragment extends Fragment implements NetworkListener {
 
 	protected static final String LOG_TAG = "ViewMissilesActivity";
 	private ViewMissileAdapter mViewMissileAdapter;
 	private ListView listView;
+	private TextView txtEmpty;
 	private TextSwitcher tvHotMissile;
 	private Pagination pagination;
 	private String mUrl;
-	private int mInterval = 10000; // 5 seconds by default, can be changed later
+	private int mInterval = 10000;
 	private Handler handler;
 	private View rootView;
 	private HomeScreenActivity activity;
@@ -87,7 +87,7 @@ public class ViewMissilesFragment extends Fragment {
 		isViewAllMissiles = getArguments().getBoolean("viewall");
 		initListView();
 
-		if (!isSearchBarExpanded) {
+		if (!isSearchEnabled) {
 			pagination.getMissileFromServer();
 			getHotMissileFromServer();
 			startRepeatingTask();
@@ -103,9 +103,10 @@ public class ViewMissilesFragment extends Fragment {
 
 	private void initListView() {
 		listView = (ListView) rootView.findViewById(R.id.lv_missiles);
+		txtEmpty = (TextView) rootView.findViewById(R.id.tvEmpty);
 		mViewMissileAdapter = new ViewMissileAdapter(getActivity());
 		listView.setAdapter(mViewMissileAdapter);
-		pagination = new Pagination(listView, mViewMissileAdapter, mUrl);
+		pagination = new Pagination(listView, mViewMissileAdapter, mUrl, this);
 		listView.setOnScrollListener(pagination);
 		listView.setOnItemClickListener(listener);
 		tvHotMissile = (TextSwitcher) rootView.findViewById(R.id.tvHotMissile);
@@ -152,9 +153,6 @@ public class ViewMissilesFragment extends Fragment {
 
 					@Override
 					public void onClick(View v) {
-
-						// Toast.makeText(getActivity(), "aa",
-						// Toast.LENGTH_LONG).show();
 						MissileFragment missileFragment = new MissileFragment();
 						Bundle bundle = new Bundle();
 						bundle.putParcelable("missile",
@@ -207,13 +205,10 @@ public class ViewMissilesFragment extends Fragment {
 		@Override
 		public void onSuccess(JSONObject missilesJsonObject) {
 			try {
+				txtEmpty.setVisibility(View.GONE);
+				mHeaderView.setVisibility(View.VISIBLE);
 				String message = missilesJsonObject.getString("message");
 				tvHotMissile.setText(message);
-
-				// Missile missile= new Missile();
-				// missile.setTitle(missilesJsonObject.getString("title"));
-				// missile.setMessage(message);
-				//
 				Gson gson = new Gson();
 				Missile missile = gson.fromJson(missilesJsonObject.toString(),
 						Missile.class);
@@ -419,5 +414,14 @@ public class ViewMissilesFragment extends Fragment {
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
 		inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()
 				.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+	}
+
+	@Override
+	public void requestStatus(Boolean status) {
+		if (status) {
+			txtEmpty.setVisibility(View.GONE);
+		} else {
+			txtEmpty.setText("No results found!");
+		}
 	}
 }

@@ -16,6 +16,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -26,11 +27,13 @@ import com.matrix.missile.controller.adapter.StartModule;
 import com.matrix.missile.controller.adapter.ViewMissileAdapter;
 import com.matrix.missile.model.Missile;
 import com.matrix.missile.util.MissileRestClient;
+import com.matrix.missile.util.NetworkListener;
 import com.matrix.missile.util.db.MissileIdDataSource;
 
-public class MyMissilesFragment extends Fragment {
+public class MyMissilesFragment extends Fragment implements NetworkListener {
 	private ViewMissileAdapter mViewMissileAdapter;
 	private ListView listView;
+	private TextView txtEmpty;
 	private MissileIdDataSource datasource;
 	private View rootView;
 
@@ -59,6 +62,7 @@ public class MyMissilesFragment extends Fragment {
 	private void initListView() {
 		((LinearLayout) rootView.findViewById(R.id.header))
 				.setVisibility(View.GONE);
+		txtEmpty = (TextView) rootView.findViewById(R.id.tvEmpty);
 		listView = (ListView) rootView.findViewById(R.id.lv_missiles);
 		mViewMissileAdapter = new ViewMissileAdapter(getActivity());
 		listView.setAdapter(mViewMissileAdapter);
@@ -91,19 +95,27 @@ public class MyMissilesFragment extends Fragment {
 		@Override
 		public void onSuccess(JSONObject missilesJsonObject) {
 			JSONArray missilesJsonArray = null;
+
 			try {
 				missilesJsonArray = missilesJsonObject.getJSONArray("missiles");
 				Gson gson = new Gson();
 				Missile[] missiles = gson.fromJson(
 						missilesJsonArray.toString(), Missile[].class);
 				mViewMissileAdapter.supportAddAll(missiles);
+				if (missiles.length == 0)
+					txtEmpty.setText("No results found");
+				else
+					txtEmpty.setVisibility(View.GONE);
+
 			} catch (JSONException e) {
+				txtEmpty.setText("No results found");
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
 		public void onFailure(String responseBody, Throwable error) {
+			txtEmpty.setText("No results found");
 			Toast.makeText(getActivity(), "Failure", Toast.LENGTH_LONG).show();
 		};
 	};
@@ -118,5 +130,14 @@ public class MyMissilesFragment extends Fragment {
 	public void onPause() {
 		datasource.close();
 		super.onPause();
+	}
+
+	@Override
+	public void requestStatus(Boolean status) {
+		if (status) {
+			txtEmpty.setVisibility(View.GONE);
+		} else {
+			txtEmpty.setText("No results found");
+		}
 	}
 }
