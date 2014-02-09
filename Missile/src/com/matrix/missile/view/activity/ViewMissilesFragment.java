@@ -58,6 +58,10 @@ public class ViewMissilesFragment extends Fragment {
 	private HomeScreenActivity activity;
 	private LinearLayout mHeaderView;
 
+	private boolean isSearchBarExpanded = false;
+	private MenuItem searchItem;
+	private Handler delaySearchHandler;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		setHasOptionsMenu(true);
@@ -289,10 +293,6 @@ public class ViewMissilesFragment extends Fragment {
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
-	public boolean isSearchBarExpanded = false;
-	private MenuItem searchItem;
-	private Handler delaySearchHandler;
-
 	private void setSearchBar(Menu menu) {
 
 		// menu.findItem(R.id.action_bar);
@@ -318,6 +318,12 @@ public class ViewMissilesFragment extends Fragment {
 				// search bar is collapsed
 				activity.getDrawerLayout().setDrawerLockMode(
 						DrawerLayout.LOCK_MODE_UNLOCKED);
+				if (isSearchEnabled) {
+					if (isResumed()) {
+						getFragmentManager().popBackStack();
+						getFragmentManager().executePendingTransactions();
+					}
+				}
 				return true;
 
 			}
@@ -338,11 +344,13 @@ public class ViewMissilesFragment extends Fragment {
 			@Override
 			public boolean onQueryTextChange(String key) {
 
-				if (key == null || key.length() == 0) {
-					if (!activity.isDrawerOpen && isSearchBarExpanded) {
-						// selectItem(lastSelectedItemPosition);
-					}
-				} else {
+				// if (key == null || key.length() == 0) {
+				// if (!activity.isDrawerOpen && isSearchBarExpanded) {
+				// // selectItem(lastSelectedItemPosition);
+				// }
+				// } else
+				//
+				if (isSearchEnabled) {
 
 					delaySearchHandler.removeMessages(5);
 					final Message msg = Message.obtain(delaySearchHandler, 5,
@@ -362,6 +370,8 @@ public class ViewMissilesFragment extends Fragment {
 		super.onPrepareOptionsMenu(menu);
 		menu.findItem(R.id.action_search).setVisible(isSearchEnabled);
 		menu.findItem(R.id.search_enabled).setVisible(!isSearchEnabled);
+		if (isSearchEnabled)
+			menu.findItem(R.id.action_search).expandActionView();
 	}
 
 	private void search(String key) {
@@ -369,7 +379,8 @@ public class ViewMissilesFragment extends Fragment {
 		MissileRestClient.get("missiles/search/" + key + ".json",
 				requestParams, jsonSearchMissileResponseHandler);
 
-		Toast.makeText(getActivity(), key, Toast.LENGTH_SHORT).show();
+		// Toast.makeText(getActivity(), "test:" + key,
+		// Toast.LENGTH_SHORT).show();
 
 	}
 
@@ -381,8 +392,6 @@ public class ViewMissilesFragment extends Fragment {
 					Missile[].class);
 			mViewMissileAdapter.clear();
 			mViewMissileAdapter.supportAddAll(missiles);
-			// listView.setSelectionFromTop(listView.getFirstVisiblePosition()
-			// + missiles.length, 10);
 		}
 
 		public void onFailure(int statusCode, Throwable e,
@@ -390,12 +399,6 @@ public class ViewMissilesFragment extends Fragment {
 			mViewMissileAdapter.clear();
 		};
 	};
-
-	// public void getMissileFromServer() {
-	// RequestParams requestParams = new RequestParams("page",
-	// String.valueOf(pageNo));
-	// MissileRestClient.get(mUrl, requestParams, this);
-	// }
 
 	/**
 	 * hides the soft keyboard
