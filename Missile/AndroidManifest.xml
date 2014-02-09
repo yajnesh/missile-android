@@ -39,6 +39,14 @@
         </activity>
         <activity android:name="com.matrix.missile.view.activity.MyMissilesFragment" >
         </activity>
+        <activity
+            android:name="com.matrix.missile.view.activity.AboutAvtivity"
+            android:label="@string/title_activity_about_avtivity"
+            android:parentActivityName="com.matrix.missile.view.activity.HomeScreenActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.matrix.missile.view.activity.HomeScreenActivity" />
+        </activity>
     </application>
 
 </manifest>

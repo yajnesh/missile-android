@@ -13,5 +13,7 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="what_s_hot">What\'s hot</string>
     <string name="search">search</string>
+    <string name="title_activity_about_avtivity">About Missile</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
