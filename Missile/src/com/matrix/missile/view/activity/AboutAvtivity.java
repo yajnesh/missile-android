@@ -1,15 +1,12 @@
 package com.matrix.missile.view.activity;
 
-import com.matrix.missile.R;
-import com.matrix.missile.R.id;
-import com.matrix.missile.R.layout;
-
-import android.os.Bundle;
 import android.app.Activity;
-import android.view.Menu;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.webkit.WebView;
-import android.support.v4.app.NavUtils;
+
+import com.matrix.missile.R;
 
 public class AboutAvtivity extends Activity {
 
@@ -19,7 +16,8 @@ public class AboutAvtivity extends Activity {
 		setContentView(R.layout.about_avtivity_layout);
 		// Show the Up button in the action bar.
 		setupActionBar();
-	((WebView)findViewById(R.id.wvAbout)).loadUrl("file:///android_asset/about.html");	
+		((WebView) findViewById(R.id.wvAbout))
+				.loadUrl("file:///android_asset/about.html");
 	}
 
 	/**
@@ -31,7 +29,6 @@ public class AboutAvtivity extends Activity {
 
 	}
 
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -47,6 +44,12 @@ public class AboutAvtivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onBackPressed() {
+		NavUtils.navigateUpFromSameTask(this);// TODO Auto-generated method stub
+		//finish();
 	}
 
 }
