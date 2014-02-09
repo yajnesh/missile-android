@@ -2,17 +2,25 @@ package com.matrix.missile.view.activity;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MenuItem.OnActionExpandListener;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Toast;
 
 import com.matrix.missile.R;
@@ -32,7 +40,9 @@ public class HomeScreenActivity extends FragmentActivity implements
 	private CharSequence mDrawerTitle;
 	private CharSequence mAppTitle;
 	private ListView mDrawerList;
-	private boolean isDrawerOpen = false;
+	public boolean isDrawerOpen = false;
+	private MenuItem searchItem;
+	private Handler delaySearchHandler;
 
 	private NavigationDrawerModel getNavigationDrawerModel(String title) {
 		NavigationDrawerModel navModel = new NavigationDrawerModel();
@@ -41,6 +51,7 @@ public class HomeScreenActivity extends FragmentActivity implements
 	}
 
 	private void setNavigationBar() {
+
 		mAppTitle = mDrawerTitle = getTitle();
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
@@ -126,7 +137,12 @@ public class HomeScreenActivity extends FragmentActivity implements
 		generateStaticNavBarItems();
 		setNavigationBar();
 		setNavigationListAdapter();
+		// showMissileList();
+
+		// By default selece first item
+		setTitle(tags.get(0).getNavItem());
 		showMissileList();
+
 	}
 
 	private void generateStaticNavBarItems() {
@@ -164,6 +180,8 @@ public class HomeScreenActivity extends FragmentActivity implements
 		mDrawerList.setItemChecked(position, true);
 		mDrawerLayout.closeDrawer(mDrawerList);
 		navigationListAdapter.changeSelected(position);
+
+		setTitle(tags.get(position).getNavItem());
 		switch (position) {
 		case 0:
 			showMissileList();
@@ -185,6 +203,10 @@ public class HomeScreenActivity extends FragmentActivity implements
 			break;
 		}
 
+	}
+
+	public DrawerLayout getDrawerLayout() {
+		return mDrawerLayout;
 	}
 
 }

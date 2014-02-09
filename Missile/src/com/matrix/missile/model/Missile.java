@@ -1,9 +1,9 @@
 package com.matrix.missile.model;
 
-import com.matrix.missile.util.Util;
-
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.matrix.missile.util.Util;
 
 public class Missile implements Parcelable {
 	private int id;
