@@ -1,51 +1,45 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_background"
+    android:background="@drawable/main_background_with_background"
+    android:orientation="vertical"
     tools:context=".MissileFragment" >
 
-    <TextView
+    <com.matrix.missile.view.customviews.CustomeTextView
         android:id="@+id/txtHeader"
+        style="@style/titleStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:background="#f2f2f2"
-        android:gravity="center"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
-        android:text="@string/new_missile"
-        android:textSize="22sp" />
+        android:text="@string/new_missile" />
 
-    <EditText
-        android:id="@+id/editTitle"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtHeader"
-        android:layout_centerHorizontal="true"
-        android:hint="@string/missile_title"
-        android:textSize="18sp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/normal_padding" >
 
-    <EditText
-        android:id="@+id/editMessage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editTitle"
-        android:layout_centerHorizontal="true"
-        android:hint="@string/missile_content"
-        android:minHeight="100dp"
-        android:textSize="18sp" />
+        <com.matrix.missile.view.customviews.CustomeEditText
+            android:id="@+id/editTitle"
+            style="@style/nativeEditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/missile_title" />
 
-    <Button
-        android:id="@+id/btnSend"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editMessage"
-        android:layout_centerHorizontal="true"
-        android:text="@string/send_missile"
-        android:textSize="18sp" />
+        <com.matrix.missile.view.customviews.CustomeEditText
+            android:id="@+id/editMessage"
+            style="@style/nativeEditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/missile_content"
+            android:minLines="3" />
 
+        <com.matrix.missile.view.customviews.CustomeButton
+            android:id="@+id/btnSend"
+            style="@style/nativeButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_missile" />
+    </LinearLayout>
 
-
-</RelativeLayout>
+</LinearLayout>

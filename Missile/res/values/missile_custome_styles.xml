@@ -52,4 +52,14 @@
         <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
     </style>
 
+    <style name="nativeButtonStyle">
+        <item name="android:background">@drawable/button_selector_selector</item>
+        <item name="android:padding">@dimen/normal_padding</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="nativeEditTextStyle">
+        <item name="android:textColor">@color/manu_item_selected</item>
+    </style>
+
 </resources>
