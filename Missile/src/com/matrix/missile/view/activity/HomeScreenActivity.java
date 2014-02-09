@@ -200,7 +200,7 @@ public class HomeScreenActivity extends FragmentActivity implements
 					sendMissileActivity, null, "Launch Missile");
 			break;
 		case 4:
-			startActivity(new Intent(HomeScreenActivity.this,AboutAvtivity.class));
+			startActivity(new Intent(HomeScreenActivity.this,AboutActivity.class));
 		}
 
 	}

@@ -8,7 +8,7 @@ import android.webkit.WebView;
 
 import com.matrix.missile.R;
 
-public class AboutAvtivity extends Activity {
+public class AboutActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class AboutAvtivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		NavUtils.navigateUpFromSameTask(this);// TODO Auto-generated method stub
-		//finish();
+		// finish();
 	}
 
 }
