@@ -6,8 +6,6 @@
     android:background="@drawable/main_background"
     android:focusable="false"
     android:focusableInTouchMode="false"
-    android:footerDividersEnabled="true"
-    android:headerDividersEnabled="true"
     android:scrollbars="none" >
 
 </ListView>
