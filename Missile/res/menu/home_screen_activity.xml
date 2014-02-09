@@ -6,7 +6,6 @@
         android:id="@+id/action_search"
         android:actionViewClass="android.widget.SearchView"
         android:icon="@drawable/ic_action_search"
-        
         android:showAsAction="ifRoom|collapseActionView"
         android:title="@string/search"/>
     <item
@@ -14,5 +13,10 @@
         android:icon="@drawable/ic_action_search"
         android:showAsAction="ifRoom"
         android:title="@string/search"/>
+    <item
+        android:id="@+id/add_menu_item"
+        android:icon="@drawable/ic_action_new"
+        android:showAsAction="always"
+        android:title="@string/add"/>
 
 </menu>

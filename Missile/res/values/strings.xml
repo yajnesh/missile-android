@@ -13,5 +13,6 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="what_s_hot">What\'s hot</string>
     <string name="search">search</string>
+    <string name="add">Add</string>
 
 </resources>

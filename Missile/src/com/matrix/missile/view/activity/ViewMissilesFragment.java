@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,7 +30,6 @@ import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewSwitcher.ViewFactory;
 
 import com.google.gson.Gson;
@@ -276,7 +274,10 @@ public class ViewMissilesFragment extends Fragment {
 			}
 			// http://localhost:3000/missiles/search/yaj.json
 			break;
-
+		case R.id.add_menu_item:
+			StartModule.addFragmentForModule(getFragmentManager(),
+					new SendMissileFragment());
+			break;
 		default:
 			break;
 		}
@@ -370,6 +371,7 @@ public class ViewMissilesFragment extends Fragment {
 		super.onPrepareOptionsMenu(menu);
 		menu.findItem(R.id.action_search).setVisible(isSearchEnabled);
 		menu.findItem(R.id.search_enabled).setVisible(!isSearchEnabled);
+		menu.findItem(R.id.add_menu_item).setVisible(!isSearchEnabled);
 		if (isSearchEnabled)
 			menu.findItem(R.id.action_search).expandActionView();
 	}
