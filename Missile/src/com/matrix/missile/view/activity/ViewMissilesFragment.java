@@ -40,17 +40,19 @@ import com.matrix.missile.controller.adapter.StartModule;
 import com.matrix.missile.controller.adapter.ViewMissileAdapter;
 import com.matrix.missile.model.Missile;
 import com.matrix.missile.util.MissileRestClient;
+import com.matrix.missile.util.NetworkListener;
 import com.matrix.missile.util.Pagination;
 
-public class ViewMissilesFragment extends Fragment {
+public class ViewMissilesFragment extends Fragment implements NetworkListener {
 
 	protected static final String LOG_TAG = "ViewMissilesActivity";
 	private ViewMissileAdapter mViewMissileAdapter;
 	private ListView listView;
+	private TextView txtEmpty;
 	private TextSwitcher tvHotMissile;
 	private Pagination pagination;
 	private String mUrl;
-	private int mInterval = 10000; // 5 seconds by default, can be changed later
+	private int mInterval = 10000;
 	private Handler handler;
 	private View rootView;
 	private HomeScreenActivity activity;
@@ -59,6 +61,7 @@ public class ViewMissilesFragment extends Fragment {
 	private boolean isSearchBarExpanded = false;
 	private MenuItem searchItem;
 	private Handler delaySearchHandler;
+	private Boolean isViewAllMissiles = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -81,12 +84,16 @@ public class ViewMissilesFragment extends Fragment {
 				.inflate(R.layout.activity_missile, container, false);
 		mUrl = getArguments().getString("url");
 		isSearchEnabled = getArguments().getBoolean("search");
+		isViewAllMissiles = getArguments().getBoolean("viewall");
 		initListView();
 
-		if (!isSearchBarExpanded) {
+		if (!isSearchEnabled) {
 			pagination.getMissileFromServer();
 			getHotMissileFromServer();
 			startRepeatingTask();
+		} else {
+			txtEmpty.setText("Please enter text to search");
+
 		}
 
 		return rootView;
@@ -99,9 +106,10 @@ public class ViewMissilesFragment extends Fragment {
 
 	private void initListView() {
 		listView = (ListView) rootView.findViewById(R.id.lv_missiles);
+		txtEmpty = (TextView) rootView.findViewById(R.id.tvEmpty);
 		mViewMissileAdapter = new ViewMissileAdapter(getActivity());
 		listView.setAdapter(mViewMissileAdapter);
-		pagination = new Pagination(listView, mViewMissileAdapter, mUrl);
+		pagination = new Pagination(listView, mViewMissileAdapter, mUrl, this);
 		listView.setOnScrollListener(pagination);
 		listView.setOnItemClickListener(listener);
 		tvHotMissile = (TextSwitcher) rootView.findViewById(R.id.tvHotMissile);
@@ -137,25 +145,27 @@ public class ViewMissilesFragment extends Fragment {
 				}
 			}
 		};
-		if (isSearchEnabled) {
+		// called for listing special missiles like tags, disable header
+		if (!isViewAllMissiles)
 			mHeaderView.setVisibility(View.GONE);
-		} else {
-			mHeaderView.setOnClickListener(new OnClickListener() {
+		else {
+			if (isSearchEnabled) {
+				mHeaderView.setVisibility(View.GONE);
+			} else {
+				mHeaderView.setOnClickListener(new OnClickListener() {
 
-				@Override
-				public void onClick(View v) {
-
-					// Toast.makeText(getActivity(), "aa",
-					// Toast.LENGTH_LONG).show();
-					MissileFragment missileFragment = new MissileFragment();
-					Bundle bundle = new Bundle();
-					bundle.putParcelable("missile",
-							(Missile) tvHotMissile.getTag());
-					missileFragment.setArguments(bundle);
-					StartModule.addFragmentForModule(getFragmentManager(),
-							missileFragment);
-				}
-			});
+					@Override
+					public void onClick(View v) {
+						MissileFragment missileFragment = new MissileFragment();
+						Bundle bundle = new Bundle();
+						bundle.putParcelable("missile",
+								(Missile) tvHotMissile.getTag());
+						missileFragment.setArguments(bundle);
+						StartModule.addFragmentForModule(getFragmentManager(),
+								missileFragment);
+					}
+				});
+			}
 		}
 	}
 
@@ -198,13 +208,10 @@ public class ViewMissilesFragment extends Fragment {
 		@Override
 		public void onSuccess(JSONObject missilesJsonObject) {
 			try {
+				txtEmpty.setVisibility(View.GONE);
+				mHeaderView.setVisibility(View.VISIBLE);
 				String message = missilesJsonObject.getString("message");
 				tvHotMissile.setText(message);
-
-				// Missile missile= new Missile();
-				// missile.setTitle(missilesJsonObject.getString("title"));
-				// missile.setMessage(message);
-				//
 				Gson gson = new Gson();
 				Missile missile = gson.fromJson(missilesJsonObject.toString(),
 						Missile.class);
@@ -268,6 +275,7 @@ public class ViewMissilesFragment extends Fragment {
 				Bundle bundle = new Bundle();
 				bundle.putString("url", "missiles/search/.json");
 				bundle.putBoolean("search", true);
+				bundle.putBoolean("viewall", false);
 				viewMissilesFragment.setArguments(bundle);
 				StartModule.addFragmentForModule(getFragmentManager(),
 						viewMissilesFragment);
@@ -286,12 +294,13 @@ public class ViewMissilesFragment extends Fragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.home_screen_activity, menu);
-		// Log.d("missile", "craete options");
-		setSearchBar(menu);
-		// setSortSpinner(menu);
-
-		super.onCreateOptionsMenu(menu, inflater);
+		if (isViewAllMissiles || isSearchEnabled) {
+			inflater.inflate(R.menu.home_screen_activity, menu);
+			// Log.d("missile", "craete options");
+			setSearchBar(menu);
+			// setSortSpinner(menu);
+			super.onCreateOptionsMenu(menu, inflater);
+		}
 	}
 
 	private void setSearchBar(Menu menu) {
@@ -344,7 +353,7 @@ public class ViewMissilesFragment extends Fragment {
 
 			@Override
 			public boolean onQueryTextChange(String key) {
-
+				txtEmpty.setVisibility(View.GONE);
 				// if (key == null || key.length() == 0) {
 				// if (!activity.isDrawerOpen && isSearchBarExpanded) {
 				// // selectItem(lastSelectedItemPosition);
@@ -368,12 +377,14 @@ public class ViewMissilesFragment extends Fragment {
 
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
-		super.onPrepareOptionsMenu(menu);
-		menu.findItem(R.id.action_search).setVisible(isSearchEnabled);
-		menu.findItem(R.id.search_enabled).setVisible(!isSearchEnabled);
-		menu.findItem(R.id.add_menu_item).setVisible(!isSearchEnabled);
-		if (isSearchEnabled)
-			menu.findItem(R.id.action_search).expandActionView();
+		if (isViewAllMissiles || isSearchEnabled) {
+			super.onPrepareOptionsMenu(menu);
+			menu.findItem(R.id.action_search).setVisible(isSearchEnabled);
+			menu.findItem(R.id.search_enabled).setVisible(!isSearchEnabled);
+			menu.findItem(R.id.add_menu_item).setVisible(!isSearchEnabled);
+			if (isSearchEnabled)
+				menu.findItem(R.id.action_search).expandActionView();
+		}
 	}
 
 	private void search(String key) {
@@ -394,11 +405,19 @@ public class ViewMissilesFragment extends Fragment {
 					Missile[].class);
 			mViewMissileAdapter.clear();
 			mViewMissileAdapter.supportAddAll(missiles);
+			if (missiles.length == 0) {
+				txtEmpty.setVisibility(View.VISIBLE);
+				txtEmpty.setText("No results found!");
+			} else {
+				txtEmpty.setVisibility(View.GONE);
+			}
 		}
 
 		public void onFailure(int statusCode, Throwable e,
 				JSONObject errorResponse) {
 			mViewMissileAdapter.clear();
+			txtEmpty.setVisibility(View.VISIBLE);
+			txtEmpty.setText("No results found!");
 		};
 	};
 
@@ -410,5 +429,15 @@ public class ViewMissilesFragment extends Fragment {
 				.getSystemService(Context.INPUT_METHOD_SERVICE);
 		inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus()
 				.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+	}
+
+	@Override
+	public void requestStatus(Boolean status) {
+		if (status) {
+			txtEmpty.setVisibility(View.GONE);
+		} else {
+			txtEmpty.setVisibility(View.VISIBLE);
+			txtEmpty.setText("No results found!");
+		}
 	}
 }

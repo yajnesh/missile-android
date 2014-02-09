@@ -94,6 +94,13 @@ public class SendMissileFragment extends Fragment implements OnClickListener {
 				e.printStackTrace();
 			}
 			Util.showToast(getActivity(), "Missile launched successfully");
+			// TODO
+			editMessage.setText("");
+			editTitle.setText("");
+			// if (isResumed()) {
+			// getFragmentManager().popBackStack();
+			// getFragmentManager().executePendingTransactions();
+			// }
 		}
 
 		@Override

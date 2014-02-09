@@ -24,6 +24,8 @@ public class TagController implements TextLinkClickListener {
 	public void onTextLinkClick(View textView, String clickedString) {
 
 		Bundle bundle = new Bundle();
+		bundle.putBoolean("viewall", false);
+		bundle.putBoolean("search", false);
 		bundle.putString("url", "tags/" + clickedString.replace("#", "")
 				+ ".json");
 		fragment.setArguments(bundle);
