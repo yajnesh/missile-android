@@ -54,7 +54,6 @@ public class MyMissilesFragment extends Fragment {
 
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 	}
 
 	private void initListView() {
@@ -77,25 +76,6 @@ public class MyMissilesFragment extends Fragment {
 			missileFragment.setArguments(bundle);
 			StartModule.addFragmentForModule(getFragmentManager(),
 					missileFragment);
-			// FragmentManager fragmentManager2 = getFragmentManager();
-			// FragmentTransaction fragmentTransaction2 = fragmentManager2
-			// .beginTransaction();
-			// MissileFragment fragment2 = new MissileFragment();
-			//
-			// Missile missile = (Missile) listView.getItemAtPosition(position);
-			// Bundle bundle = new Bundle();
-			// bundle.putParcelable("missile", missile);
-			// fragment2.setArguments(bundle);
-			//
-			// fragmentTransaction2.addToBackStack(null);
-			// fragmentTransaction2.hide(MyMissilesFragment.this);
-			// fragmentTransaction2.add(android.R.id.content, fragment2);
-			// fragmentTransaction2.commit();
-
-			// Missile missile = (Missile) listView.getItemAtPosition(position);
-			// Intent intent = new Intent(getActivity(), MissileActivity.class);
-			// intent.putExtra("missile", missile);
-			// startActivity(intent);
 		}
 	};
 
